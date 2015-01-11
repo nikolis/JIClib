@@ -306,6 +306,16 @@ public class Labeling {
 		}
 	}
 	
+	public static void mainMethod(BufferedImage image,String name)
+	{
+		image = ThresHolding.grayImage2Bin(image) ;
+		Labeling labeling = new Labeling(image) ;
+		int klasis = labeling.putLabels();
+		for(int i=2; i<=klasis; i++)
+		{
+			labeling.paintTheRegions(i,name); 
+		}
+	}
 	
 	public static void main(String args[])
 	{

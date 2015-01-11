@@ -2,6 +2,8 @@ package featureexctraction;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 
 public class ZernikeMoments
@@ -44,7 +46,7 @@ public class ZernikeMoments
 		}
 	}
 	
-	public void mainProcces(int order,int lambdaChoise)
+	public ArrayList<Double> mainProcces(int order,int lambdaChoise)
 	{
 		double lambda ,ZMpq; 
 		int moments =0; 
@@ -54,6 +56,7 @@ public class ZernikeMoments
 		findInsideDiscImage();
 		Complex z[][] = new Complex[order*order][order*order] ;
 		double R,theta,r ; 
+		ArrayList<Double> momentsToReturn = new ArrayList<>() ; 
 		for(int p=0; p<=order; p++)
 		{
 			for(int q=0; q<=order; q++)
@@ -90,10 +93,12 @@ public class ZernikeMoments
 					z[p][q].imag = lambda*z[p][q].imag;
 					
 					ZMpq=Math.sqrt(Math.pow(z[p][q].real,2)+Math.pow(z[p][q].imag,2));
+					momentsToReturn.add(ZMpq) ; 
 					System.out.println(ZMpq) ; 
 				}
 			}
 		}	
+		return momentsToReturn;
 	}
 	
 	
@@ -199,6 +204,6 @@ public class ZernikeMoments
 			e.printStackTrace();
 		}			
 		ZernikeMoments zer = new ZernikeMoments(image) ; 		
-		zer.mainProcces(5,1);
+		zer.mainProcces(10,1);
 	}
 }
