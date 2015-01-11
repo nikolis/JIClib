@@ -2,10 +2,10 @@ package classifiers.neuralnetworks.learning;
 
 
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
@@ -72,11 +72,11 @@ public class NeuralNetwork {
 	 * @param lambda
 	 * @param numOfIterations
 	 */
-	public void workingItOut(int secondLayerUnits,int outputLayerUnits,double alpha,double lambda,int numOfIterations)
+	public void workingItOut(int secondLayerUnits,double alpha,double lambda,int numOfIterations,int numberOfLabels)
 	{
 		Theta1=NeuralHelper.createOnesMatrix(secondLayerUnits, X.columns()+1);
-		Theta2=NeuralHelper.createOnesMatrix(outputLayerUnits, secondLayerUnits+1);
-		convertY(10);
+		Theta2=NeuralHelper.createOnesMatrix(numberOfLabels, secondLayerUnits+1);
+		convertY(numberOfLabels);
 		//Theta1=neutralOperations.createMatrixOfDoublesWithRandomValues(0.1, 1.5, secondLayerUnits, X.columns()+1);
 		//Theta2=neutralOperations.createMatrixOfDoublesWithRandomValues(0.1, 1.5, outputLayerUnits, secondLayerUnits+1);
 		for(int i=0; i<numOfIterations; i++)
@@ -96,6 +96,7 @@ public class NeuralNetwork {
 				{
 					writer.write(String.valueOf(Theta1.get(i, j))+",");
 				}
+				writer.write("\n");
 			}
 			
 			writer.close();
@@ -107,6 +108,7 @@ public class NeuralNetwork {
 				{
 					writer.write(String.valueOf(Theta2.get(i, j))+",");
 				}
+				writer.write("\n");
 			}
 			writer.close();
 			} catch (FileNotFoundException | UnsupportedEncodingException e){
@@ -115,6 +117,63 @@ public class NeuralNetwork {
 		}
 
 	}
+	
+	public  void loadTRainedThetas(int secondLayerUnits, int numberOfLabels)
+	{
+		Theta1=NeuralHelper.createOnesMatrix(secondLayerUnits, X.columns()+1);
+		Theta2=NeuralHelper.createOnesMatrix(numberOfLabels, secondLayerUnits+1);
+		 try {
+			BufferedReader br2 = new BufferedReader(new FileReader("Theta2.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("Theta1.txt"));
+			for(int i=0; i<Theta1.rows(); i++)
+			{
+				String something = br.readLine();
+			
+				String Theta1rra[] = something.split(",");
+				
+				for(int j=0; j<Theta1rra.length; j++)
+				{
+					Theta1.set(i, j, Double.parseDouble(Theta1rra[j]));
+				}
+				
+				
+			}
+			
+			for(int i=0; i<Theta2.rows(); i++)
+			{	
+				String something2 = br2.readLine();
+				String Theta2rra[] = something2.split(",");
+				for(int j=0; j<Theta2rra.length; j++)
+				{
+					Theta2.set(i, j, Double.parseDouble(Theta2rra[j]));
+				}
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		// NeuralHelper.printMatrix(Theta1);
+		// NeuralHelper.printMatrix(Theta2);
+	}
+	
+	
+	public void predict()
+	{
+		Matrix a1 = NeuralHelper.addBias(X);
+		Matrix z2 = a1.multiply(Theta1.transpose()) ;
+		Matrix a2 = NeuralHelper.sigmoid(z2);
+		a2=NeuralHelper.addBias(a2);
+		Matrix z3 = a2.multiply(Theta2.transpose()) ;
+		Matrix a3 = NeuralHelper.sigmoid(z3);
+		NeuralHelper.printMatrix(a3);
+	}
+	
+	
+	
 	
 	
 	

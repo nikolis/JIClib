@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import classifiers.neuralnetworks.learning.NeuralNetwork;
+
 public class TrainingNeuralNetworks {
 	double x[][] ;
 	double y[][] ;
@@ -126,7 +128,7 @@ public class TrainingNeuralNetworks {
 			{
 				x[i][j]=xe.get(i).get(j);
 			}
-			y[i][1]=ye.get(i);
+			y[i][0]=ye.get(i);
 		}
 	}
 	
@@ -135,7 +137,11 @@ public class TrainingNeuralNetworks {
 		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ;
 		tr.TrainingForAllClasses();
 		tr.convertyx();
-		
+		NeuralNetwork nn = new NeuralNetwork() ; 
+		nn.loadParameters(tr.x, tr.y);
+		nn.workingItOut(25,0.001,1,1000,14);
+		nn.loadTRainedThetas(25, 14);
+		nn.predict();
 	}
 	
 }

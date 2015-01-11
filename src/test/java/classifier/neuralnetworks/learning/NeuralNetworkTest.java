@@ -35,6 +35,6 @@ public class NeuralNetworkTest {
 		}
 	
 		//nncost.loadParameters(x, y);
-		nncost.workingItOut(25,10,0.001,1.0,500000000);
+		nncost.workingItOut(25,10,0.001,1,500000000);
 	}
 }
