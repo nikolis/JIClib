@@ -11,22 +11,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.security.auth.x500.X500Principal;
 
 import classifiers.neuralnetworks.learning.NeuralNetwork;
+import classifiers.neuralnetworks.utilities.NeuralHelper;
 
 public class TrainingNeuralNetworks {
 	double x[][] ;
 	double y[][] ;
 	ArrayList<ArrayList<Double>> xe = new ArrayList<ArrayList<Double>>(); 
 	ArrayList<Double> ye = new ArrayList<Double>() ;
-	
+	double x2[][];
+	ArrayList<Double> xe2 = new ArrayList<Double>(); 
 	int numberOfMoments = 30 ; 
 	
 	public void examples()
 	{
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
-		String imageToRead ="images/tests/t7.jpg" ;
+		String imageToRead ="images/tests/t23.jpg" ;
 		String name =imageToRead.substring(imageToRead.indexOf(".jpg")-2,imageToRead.indexOf(".jpg"))  ;
 		try{
 			image = ImageIO.read(new File(imageToRead));
@@ -62,6 +65,8 @@ public class TrainingNeuralNetworks {
 			return 6 ; 
 		case "7":
 			return 7 ; 
+		case "8":
+			return 8 ; 
 		case "9":
 			return 9 ; 
 		case "multiply":
@@ -101,13 +106,12 @@ public class TrainingNeuralNetworks {
 	}
 	
 	public void createXandYsForSpesificImage(String pathToFile) 
-	{
+	{ 
 		BufferedImage image;
 		try {
 			image = ImageIO.read(new File(pathToFile));
 			ZernikeMoments zernMom  = new ZernikeMoments(image);
-			ArrayList<Double> moments = zernMom.mainProcces(10, 1);
-			xe.add(moments);
+			xe2 = zernMom.mainProcces(10, 1);
 			convertx() ; 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -155,28 +159,34 @@ public class TrainingNeuralNetworks {
 	
 	public void convertx()
 	{
-		x= new double[xe.size()][30] ;
-		y= new double[xe.size()][1];
-		for(int i=0;i<xe.size(); i++)
-		{
+		x2= new double[1][30] ;
+		
 			for(int j=0; j<30;j++)
 			{
-				x[i][j]=xe.get(i).get(j);
+				x2[0][j]=xe2.get(j);
 			}
-			//y[i][0]=ye.get(i);
-		}
 	}
+	public static void training()
+	{
+		
+	}
+	
+	
 	public static void main(String args[])
 	{
 		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ;
+		//tr.examples();
 		tr.TrainingForAllClasses();
 		tr.convertyx();
 		NeuralNetwork nn = new NeuralNetwork() ; 
 		nn.loadParameters(tr.x, tr.y);
-		nn.workingItOut(25,0.001,1,1000,14);
+		nn.workingItOut(25, 0.001, 1, 1000, 14);
+		//NeuralNetwork nn = new NeuralNetwork() ;
+		//TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ; 
 		nn.loadTRainedThetas(25, 14);
-		tr.createXandYsForSpesificImage("/home/nikolis/git/SolveIT/images/testSet/1/subImage2t9.jpg") ; 
-		nn.predict(tr.x);
+		tr.createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\4\\subImage215.jpg") ; 
+		System.out.println(nn.predict(tr.x2));
+		
 	}
 	
 }

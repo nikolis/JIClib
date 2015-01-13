@@ -45,6 +45,8 @@ public class NeuralNetwork {
 	{
 			this.X=new Basic2DMatrix(x);
 			this.Y= new Basic2DMatrix(y);		
+			NeuralHelper.printMatrix(this.Y);
+
 	}
 	/**
 	 * Same method  as previous just adds the possibility of entering the Theta terms already trained 
@@ -81,7 +83,6 @@ public class NeuralNetwork {
 		//Theta2=neutralOperations.createMatrixOfDoublesWithRandomValues(0.1, 1.5, outputLayerUnits, secondLayerUnits+1);
 		for(int i=0; i<numOfIterations; i++)
 		{
-			
 			feedForward(lambda);
 			Theta1= Theta1.subtract(Theta1_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
 			Theta2= Theta2.subtract(Theta2_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
@@ -161,7 +162,7 @@ public class NeuralNetwork {
 	}
 	
 	
-	public void predict(double Xin[][])
+	public int  predict(double Xin[][])
 	{
 		Matrix X = new Basic2DMatrix(Xin);
 		Matrix a1 = NeuralHelper.addBias(X);
@@ -171,6 +172,20 @@ public class NeuralNetwork {
 		Matrix z3 = a2.multiply(Theta2.transpose()) ;
 		Matrix a3 = NeuralHelper.sigmoid(z3);
 		NeuralHelper.printMatrix(a3);
+		int max=-1 ; 
+		double maxValue = -1 ; 
+		for(int i=0; i<a3.rows(); i++)
+		{
+			for(int j=0; j<a3.columns(); j++)
+			{
+				if(a3.get(i, j)>=maxValue)
+				{
+					maxValue=a3.get(i, j);
+					max = j ;
+				}
+			}
+		}	
+		return max;
 	}
 	
 	
@@ -192,8 +207,8 @@ public class NeuralNetwork {
 		Matrix realY = new Basic2DMatrix(Y.rows(),numberOfLabels) ;
 		for(int i=0; i<Y.rows(); i++)
 		{	
-			int num=(int)Y.get(i, 0)-1 ;	
-			realY.set(i, (int)(num), 1);
+			int num=(int)Y.get(i, 0) ;	
+			realY.set(i, num, 1);
 		}
 		Y=realY ; 
 	}

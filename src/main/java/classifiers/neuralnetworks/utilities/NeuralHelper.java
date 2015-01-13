@@ -4,6 +4,8 @@ import java.util.Random;
 
 import org.la4j.matrix.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
+import org.la4j.vector.Vector;
+import org.la4j.vector.Vectors;
 
 public class NeuralHelper{
 
@@ -38,6 +40,11 @@ public class NeuralHelper{
 		}
 		return mat2 ;  
 	} 
+	
+	
+	
+	
+	
 	
 	public static void printMatrix(Matrix mat)
 	{
