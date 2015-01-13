@@ -161,8 +161,9 @@ public class NeuralNetwork {
 	}
 	
 	
-	public void predict()
+	public void predict(double Xin[][])
 	{
+		Matrix X = new Basic2DMatrix(Xin);
 		Matrix a1 = NeuralHelper.addBias(X);
 		Matrix z2 = a1.multiply(Theta1.transpose()) ;
 		Matrix a2 = NeuralHelper.sigmoid(z2);

@@ -100,6 +100,27 @@ public class TrainingNeuralNetworks {
 		    }
 	}
 	
+	public void createXandYsForSpesificImage(String pathToFile) 
+	{
+		BufferedImage image;
+		try {
+			image = ImageIO.read(new File(pathToFile));
+			ZernikeMoments zernMom  = new ZernikeMoments(image);
+			ArrayList<Double> moments = zernMom.mainProcces(10, 1);
+			xe.add(moments);
+			convertx() ; 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
 	public void TrainingForAllClasses()
 	{
 		creatingXandYs("0");
@@ -132,6 +153,19 @@ public class TrainingNeuralNetworks {
 		}
 	}
 	
+	public void convertx()
+	{
+		x= new double[xe.size()][30] ;
+		y= new double[xe.size()][1];
+		for(int i=0;i<xe.size(); i++)
+		{
+			for(int j=0; j<30;j++)
+			{
+				x[i][j]=xe.get(i).get(j);
+			}
+			//y[i][0]=ye.get(i);
+		}
+	}
 	public static void main(String args[])
 	{
 		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ;
@@ -141,7 +175,8 @@ public class TrainingNeuralNetworks {
 		nn.loadParameters(tr.x, tr.y);
 		nn.workingItOut(25,0.001,1,1000,14);
 		nn.loadTRainedThetas(25, 14);
-		nn.predict();
+		tr.createXandYsForSpesificImage("/home/nikolis/git/SolveIT/images/testSet/1/subImage2t9.jpg") ; 
+		nn.predict(tr.x);
 	}
 	
 }

@@ -94,7 +94,7 @@ public class ZernikeMoments
 					
 					ZMpq=Math.sqrt(Math.pow(z[p][q].real,2)+Math.pow(z[p][q].imag,2));
 					momentsToReturn.add(ZMpq) ; 
-					System.out.println(ZMpq) ; 
+					//System.out.println(ZMpq) ; 
 				}
 			}
 		}	

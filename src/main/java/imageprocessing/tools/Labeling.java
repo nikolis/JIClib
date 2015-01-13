@@ -322,7 +322,7 @@ public class Labeling {
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
 		BufferedImage image12=null;
-		String filetoread = "images/tests/t2.jpg" ;
+		String filetoread = "images/testSet/t10.jpg" ;
 		try{
 			image = ImageIO.read(new File(filetoread));
 			image12 = ThresHolding.grayImage2Bin(image) ;
