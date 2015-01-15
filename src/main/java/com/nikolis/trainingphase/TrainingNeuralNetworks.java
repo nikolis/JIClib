@@ -11,10 +11,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.security.auth.x500.X500Principal;
 
 import classifiers.neuralnetworks.learning.NeuralNetwork;
-import classifiers.neuralnetworks.utilities.NeuralHelper;
+
 
 public class TrainingNeuralNetworks {
 	double x[][] ;
@@ -166,26 +165,51 @@ public class TrainingNeuralNetworks {
 				x2[0][j]=xe2.get(j);
 			}
 	}
-	public static void training()
-	{
-		
-	}
 	
+	public void testTheTestSet(NeuralNetwork neuralNetwork)
+	{
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\0\\subImage310.jpg") ; 
+		System.out.println(neuralNetwork.predict(this.x2));
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\1\\subImage2t3.jpg") ; 
+		System.out.println(neuralNetwork.predict(this.x2));
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\2\\subImage313.jpg") ; 
+		System.out.println(neuralNetwork.predict(this.x2));
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\4\\subImage615.jpg") ; 
+		System.out.println(neuralNetwork.predict(this.x2));
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\5\\subImage7t2.jpg") ; 
+		System.out.println(neuralNetwork.predict(this.x2));
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\6\\subImage1017.jpg") ; 
+		System.out.println(neuralNetwork.predict(this.x2));
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\7\\subImage1418.jpg") ; 
+		System.out.println(neuralNetwork.predict(this.x2));
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\8\\subImage1019.jpg") ; 
+		System.out.println(neuralNetwork.predict(this.x2));
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\9\\subImage1220.jpg") ; 
+		System.out.println(neuralNetwork.predict(this.x2));
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\multiply\\subImage1022.jpg") ; 
+		System.out.println(neuralNetwork.predict(this.x2));
+	}
 	
 	public static void main(String args[])
 	{
-		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ;
-		//tr.examples();
+		
+		//TODO NEXT THINK TO CHECK ZERNIKE MOMENTS COMPUTATION 
+		/*
+		NeuralNetwork nn = new NeuralNetwork() ;
+		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ; 
+		
+		tr.examples();
 		tr.TrainingForAllClasses();
 		tr.convertyx();
-		NeuralNetwork nn = new NeuralNetwork() ; 
+		 
 		nn.loadParameters(tr.x, tr.y);
-		nn.workingItOut(25, 0.001, 1, 1000, 14);
-		//NeuralNetwork nn = new NeuralNetwork() ;
-		//TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ; 
-		nn.loadTRainedThetas(25, 14);
-		tr.createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\4\\subImage215.jpg") ; 
-		System.out.println(nn.predict(tr.x2));
+		nn.workingItOut(25, 0.001, 1, 10000, 14);
+		*/
+		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ;
+		NeuralNetwork nn = new NeuralNetwork() ;
+		nn.loadTrainedThetas();
+		tr.testTheTestSet(nn);
+		
 		
 	}
 	

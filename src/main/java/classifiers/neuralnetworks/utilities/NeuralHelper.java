@@ -1,11 +1,22 @@
 package classifiers.neuralnetworks.utilities;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
+
+
+
+
 
 import org.la4j.matrix.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
 import org.la4j.vector.Vector;
 import org.la4j.vector.Vectors;
+import org.la4j.vector.dense.BasicVector;
 
 public class NeuralHelper{
 
@@ -27,6 +38,53 @@ public class NeuralHelper{
 	}
 	
 	
+	/**
+	 * Responsible of writing a matrix in a comma separated values file 
+	 * @param matrix
+	 * @param name
+	 * @throws FileNotFoundException
+	 * @throws UnsupportedEncodingException
+	 */
+	public static void writeMatrixToFile(Matrix matrix, String name) throws FileNotFoundException, UnsupportedEncodingException
+	{
+		PrintWriter writer = new PrintWriter(name, "UTF-8");
+		for(int i=0; i<matrix.rows(); i++)
+		{
+			for(int j=0; j<matrix.columns();j++)
+			{
+				writer.write(String.valueOf(matrix.get(i, j))+",");
+			}
+			writer.write("\n");
+		}
+		writer.close();
+	}
+	
+	public static Matrix loadCsvFileInMatrix(String file,int rows, int columns) throws IOException
+	{
+		Matrix matrix = new Basic2DMatrix(rows, columns);
+		BufferedReader br = new BufferedReader(new FileReader(file)) ;
+		for(int i=0;i<rows; i++)
+		{
+			String temp = br.readLine();
+			String tempArr[] = temp.split(",");
+			for(int j=0; j<columns; j++)
+			{
+				matrix.set(i, j, Double.parseDouble(tempArr[j]));
+			}
+		}
+		br.close() ; 
+		return matrix ; 
+	}
+	
+	
+	
+	
+	/**
+	 * Basically add's one more column at the beginning of the matrix to
+	 * serve as the bias unit 
+	 * @param mat
+	 * @return
+	 */
 	public  static Matrix addBias(Matrix mat)
 	{
 		Matrix mat2 = new Basic2DMatrix(mat.rows(),mat.columns()+1);
@@ -40,10 +98,6 @@ public class NeuralHelper{
 		}
 		return mat2 ;  
 	} 
-	
-	
-	
-	
 	
 	
 	public static void printMatrix(Matrix mat)
@@ -69,6 +123,19 @@ public class NeuralHelper{
 			}
 		}
 		return ones ; 
+	}
+	
+	public static Matrix createsRanomsMatrix(int rows, int columns)
+	{
+		Matrix random = new Basic2DMatrix(rows, columns) ; 
+		for(int i=0; i<rows; i++)
+		{
+			for(int j=0; j<columns; j++)
+			{
+				random.set(i, j, Math.random());
+			}
+		}
+		return random  ; 
 	}
 	
 	public static Matrix returnAllRowsAndGivenCollumns(Matrix matrix,int columnToStart)
@@ -137,6 +204,33 @@ public class NeuralHelper{
 			}
 		}
 		return mat2 ; 
+	}
+
+
+	public static Vector sigmoid(Vector vec) {
+		Vector v2 = new BasicVector(vec.length()) ;
+		for(int i=0; i<vec.length(); i++)
+		{
+			v2.set(i, 1/(1+Math.exp(-v2.get(i)))); 
+		}
+		
+		return v2;
+	}
+
+
+	public static Vector addBias(Vector vector) {
+		Vector vector2 =  new BasicVector(vector.length()+1) ; 
+		for(int i=0; i<vector.length(); i++)
+		{
+			if(i==0)
+			{
+				vector2.set(i, 1);
+			}else
+			{
+				vector2.set(i, vector.get(i-1));
+			}
+		}
+		return vector2 ;
 	}
 	
 }

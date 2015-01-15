@@ -2,12 +2,9 @@ package classifiers.neuralnetworks.learning;
 
 
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+
 
 import classifiers.neuralnetworks.utilities.*;
 
@@ -32,7 +29,11 @@ public class NeuralNetwork {
 	Matrix Theta1_grad ;  
 	Matrix Theta2_grad ; 
 	Matrix hipothesis ; 
-	
+	Matrix alreadyTrainedTheta1 ; 
+	Matrix alreadyTrainedTheta2 ;
+	static final  int numberOfFeatures =30   ; 
+	static final int numberOfLabeles =14; 
+	static final int secondLayerUnits =25 ; 
 	
 	/**
 	 * A method that loads the parameters x,y the main input of the neural network 
@@ -45,9 +46,9 @@ public class NeuralNetwork {
 	{
 			this.X=new Basic2DMatrix(x);
 			this.Y= new Basic2DMatrix(y);		
-			NeuralHelper.printMatrix(this.Y);
-
 	}
+	
+	
 	/**
 	 * Same method  as previous just adds the possibility of entering the Theta terms already trained 
 	 * in order to give the implementation the possibility to later use advanced optimization methods.
@@ -61,8 +62,9 @@ public class NeuralNetwork {
 			this.X=new Basic2DMatrix(x);
 			this.Y= new Basic2DMatrix(y);
 			Theta1 = new Basic2DMatrix(theta1);
-			Theta2 = new Basic2DMatrix(theta2);		
+			Theta2 = new Basic2DMatrix(theta2);	
 	}
+	
 	/**
 	 * This is a method implementing the gradient Descent algorithm witch is an algorithm
 	 * that iterates as many times as inputed in numOfIteration in order to reduce the cost j of our hipothesis 
@@ -76,115 +78,78 @@ public class NeuralNetwork {
 	 */
 	public void workingItOut(int secondLayerUnits,double alpha,double lambda,int numOfIterations,int numberOfLabels)
 	{
-		Theta1=NeuralHelper.createOnesMatrix(secondLayerUnits, X.columns()+1);
-		Theta2=NeuralHelper.createOnesMatrix(numberOfLabels, secondLayerUnits+1);
+		//TODO CREATE RANDOM TO RPEVENT SYMETRY 
+		Theta1=NeuralHelper.createsRanomsMatrix(NeuralNetwork.secondLayerUnits, NeuralNetwork.numberOfFeatures+1);
+		Theta2=NeuralHelper.createsRanomsMatrix(NeuralNetwork.numberOfLabeles, NeuralNetwork.secondLayerUnits+1);
 		convertY(numberOfLabels);
-		//Theta1=neutralOperations.createMatrixOfDoublesWithRandomValues(0.1, 1.5, secondLayerUnits, X.columns()+1);
-		//Theta2=neutralOperations.createMatrixOfDoublesWithRandomValues(0.1, 1.5, outputLayerUnits, secondLayerUnits+1);
+		
 		for(int i=0; i<numOfIterations; i++)
 		{
 			feedForward(lambda);
 			Theta1= Theta1.subtract(Theta1_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
 			Theta2= Theta2.subtract(Theta2_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
-			System.out.println(computeCost(hipothesis, lambda));
+			System.out.println(computeCost(hipothesis, lambda)+" at the Iteration : "+i);
 		}
-		PrintWriter writer;
-		try {
-			writer = new PrintWriter("Theta1.txt", "UTF-8");
-			for(int i=0; i<Theta1.rows(); i++)
-			{
-				for(int j=0; j<Theta1.columns();j++)
-				{
-					writer.write(String.valueOf(Theta1.get(i, j))+",");
-				}
-				writer.write("\n");
-			}
-			
-			writer.close();
-
-			writer = new PrintWriter("Theta2.txt", "UTF-8");
-			for(int i=0; i<Theta2.rows(); i++)
-			{
-				for(int j=0; j<Theta2.columns();j++)
-				{
-					writer.write(String.valueOf(Theta2.get(i, j))+",");
-				}
-				writer.write("\n");
-			}
-			writer.close();
-			} catch (FileNotFoundException | UnsupportedEncodingException e){
-			// TODO Auto-generated catch block
+		try
+		{
+			NeuralHelper.writeMatrixToFile(Theta1,"Theta1.csv");
+			NeuralHelper.writeMatrixToFile(Theta2,"Theta2.csv");
+		}catch(Exception e)
+		{
 			e.printStackTrace();
 		}
 
 	}
 	
-	public  void loadTRainedThetas(int secondLayerUnits, int numberOfLabels)
+	
+	/**
+	 * Loads the  Csv files written  from the last workingItOut method execution 
+	 * as the csv is written by the last training process AKA execution of the workingItOut method
+	 * the size of the alreadyTrainedTheta should be the same as the last time the neuralnetwork was trained
+	 * that is why the layers size , numbers of features and number of output units(aka : number of classes)
+	 * are saved as static variables and are being set only every time we train the neural network .  
+	 */
+	public  void loadTrainedThetas()
 	{
-		Theta1=NeuralHelper.createOnesMatrix(secondLayerUnits, X.columns()+1);
-		Theta2=NeuralHelper.createOnesMatrix(numberOfLabels, secondLayerUnits+1);
-		 try {
-			BufferedReader br2 = new BufferedReader(new FileReader("Theta2.txt"));
-			BufferedReader br = new BufferedReader(new FileReader("Theta1.txt"));
-			for(int i=0; i<Theta1.rows(); i++)
-			{
-				String something = br.readLine();
-			
-				String Theta1rra[] = something.split(",");
-				
-				for(int j=0; j<Theta1rra.length; j++)
-				{
-					Theta1.set(i, j, Double.parseDouble(Theta1rra[j]));
-				}
-				
-				
-			}
-			
-			for(int i=0; i<Theta2.rows(); i++)
-			{	
-				String something2 = br2.readLine();
-				String Theta2rra[] = something2.split(",");
-				for(int j=0; j<Theta2rra.length; j++)
-				{
-					Theta2.set(i, j, Double.parseDouble(Theta2rra[j]));
-				}
-			}
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		alreadyTrainedTheta1 = new Basic2DMatrix(NeuralNetwork.secondLayerUnits,NeuralNetwork.numberOfFeatures+1); 
+		alreadyTrainedTheta2 = new Basic2DMatrix(NeuralNetwork.numberOfLabeles,NeuralNetwork.secondLayerUnits+1);
+		try {
+			NeuralHelper.loadCsvFileInMatrix("Theta1.csv", alreadyTrainedTheta1.rows(), alreadyTrainedTheta1.columns()) ;
+			NeuralHelper.loadCsvFileInMatrix("Theta2.csv", alreadyTrainedTheta2.rows(), alreadyTrainedTheta2.columns()) ;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 
-		// NeuralHelper.printMatrix(Theta1);
-		// NeuralHelper.printMatrix(Theta2);
+		
 	}
+	
 	
 	
 	public int  predict(double Xin[][])
 	{
 		Matrix X = new Basic2DMatrix(Xin);
 		Matrix a1 = NeuralHelper.addBias(X);
-		Matrix z2 = a1.multiply(Theta1.transpose()) ;
+	
+		Matrix z2 = a1.multiply(alreadyTrainedTheta1.transpose()) ;
 		Matrix a2 = NeuralHelper.sigmoid(z2);
 		a2=NeuralHelper.addBias(a2);
-		Matrix z3 = a2.multiply(Theta2.transpose()) ;
+		Matrix z3 = a2.multiply(alreadyTrainedTheta2.transpose()) ;
 		Matrix a3 = NeuralHelper.sigmoid(z3);
-		NeuralHelper.printMatrix(a3);
+		
 		int max=-1 ; 
 		double maxValue = -1 ; 
-		for(int i=0; i<a3.rows(); i++)
-		{
-			for(int j=0; j<a3.columns(); j++)
+			for(int j=0; j<a3.rows(); j++)
 			{
-				if(a3.get(i, j)>=maxValue)
+				for(int i=0; i<a3.columns();i++)
 				{
-					maxValue=a3.get(i, j);
-					max = j ;
+					if(a3.get(j,i)>=maxValue)
+					{
+						maxValue=a3.get(j,i);
+						max = i ;
+					}
 				}
 			}
-		}	
+			
 		return max;
 	}
 	
@@ -221,7 +186,6 @@ public class NeuralNetwork {
 	 */
 	public void feedForward(double lambda)
 	{		
-		
 		Matrix a1 = NeuralHelper.addBias(X);
 		Matrix z2 = a1.multiply(Theta1.transpose()) ;
 		Matrix a2 = NeuralHelper.sigmoid(z2);
@@ -231,7 +195,6 @@ public class NeuralNetwork {
 		hipothesis=a3 ;
 	
 		Matrix delta3 = a3.subtract(Y) ;
-		
 		Matrix temp = NeuralHelper.combineTwoMatrix(NeuralHelper.createOnesMatrix(z2.rows(), 1),z2);
 		Matrix delta2 = delta3.multiply(Theta2).hadamardProduct(NeuralHelper.sigmoidGradient(temp)) ;
 		Matrix delta22 = NeuralHelper.returnAllRowsAndGivenCollumns(delta2, 1);
@@ -240,6 +203,7 @@ public class NeuralNetwork {
 	
 		Matrix Delta1 = delta22.transpose().multiply(a1) ;
 		Matrix Delta2 = delta3.transpose().multiply(a2) ; 
+		
 		Theta1_grad=Delta1.divide(X.rows()).add(regularization) ; 
 		Theta2_grad=Delta2.divide(X.rows()).add(regularization2);
 	}
@@ -274,6 +238,8 @@ public class NeuralNetwork {
 		double subRegTerm = regTheta1.sum()+regTheta2.sum(); 
 		return (lambda/(2*X.rows())) * subRegTerm ;
 	}
+	
+	
 	/**
 	 * This method get as input the hipothesis and computes the cost at the given hipothesis
 	 * note that the neural network learning target is just to reduce the value outputed 

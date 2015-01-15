@@ -94,7 +94,7 @@ public class ZernikeMoments
 					
 					ZMpq=Math.sqrt(Math.pow(z[p][q].real,2)+Math.pow(z[p][q].imag,2));
 					momentsToReturn.add(ZMpq) ; 
-					//System.out.println(ZMpq) ; 
+					System.out.println(ZMpq) ; 
 				}
 			}
 		}	
@@ -199,7 +199,7 @@ public class ZernikeMoments
 	{
 		BufferedImage image = null ;  
 		try{
-			image = ImageIO.read(new File("C:\\Users\\310176547\\Desktop\\meine\\Imaging\\images\\subImage2t2.jpg"));
+			image = ImageIO.read(new File("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\0\\subImage511.jpg"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}			
