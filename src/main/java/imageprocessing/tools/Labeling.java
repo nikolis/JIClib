@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 
 
 
+
 import imageprocessing.utilities.*;
 
 
@@ -20,8 +21,8 @@ import imageprocessing.utilities.*;
 public class Labeling {
 
 	
-	int subImageWidth = 100 ; 
-	int subImageHeight = 100 ;
+	int subImageWidth = 300 ; 
+	int subImageHeight = 300 ;
 	Stack<Integer[]> searchingStack ; 
 	BufferedImage originalImage ;
 	ArrayList<Integer> pixelsGiven  ; 
@@ -64,7 +65,7 @@ public class Labeling {
 			{
 				if(isBlack(i, j) && classes[i][j]==0)
 				{
-					classes[i][j]=taxiPragmaton++ ;
+					classes[i][j]=++taxiPragmaton ;
 					checkForNeibours(i, j, taxiPragmaton);
 					while(!searchingStack.isEmpty())
 					{
@@ -105,7 +106,7 @@ public class Labeling {
 		}
 		if(i+1<originalImage.getWidth() && j-1>=0 && classes[i+1][j-1]==0)
 		{
-			if(isBlack(i+1, j-1))
+			if(isBlack(i+1, j-1) && classes[i+1][j-1]==0)
 			{
 				classes[i+1][j-1]=taksiPragmaton ; 
 				Integer[] coordinates = new Integer[2] ; 
@@ -116,7 +117,7 @@ public class Labeling {
 		}
 		if(i+1<originalImage.getWidth() && classes[i+1][j]==0)
 		{
-			if(isBlack(i+1, j))
+			if(isBlack(i+1, j) && classes[i+1][j]==0)
 			{
 				classes[i+1][j]=taksiPragmaton ; 
 				Integer[] coordinates = new Integer[2] ; 
@@ -127,7 +128,7 @@ public class Labeling {
 		}
 		if(i+1<originalImage.getWidth() && j+1<originalImage.getHeight() && classes[i+1][j+1]==0)
 		{	
-			if(isBlack(i+1, j+1))
+			if(isBlack(i+1, j+1) && classes[i+1][j+1]==0)
 			{
 				classes[i+1][j+1] = taksiPragmaton ; 
 				Integer[] coordinates = new Integer[2] ;
@@ -139,7 +140,7 @@ public class Labeling {
 		}
 		if(j+1<originalImage.getHeight() && classes[i][j+1]==0)
 		{
-			if(isBlack(i, j+1))
+			if(isBlack(i, j+1) && classes[i][j+1]==0)
 			{
 				classes[i][j+1] =taksiPragmaton ; 
 				Integer[] coordinates = new Integer[2] ;
@@ -150,7 +151,7 @@ public class Labeling {
 		}
 		if(i-1>=0 && j+1<originalImage.getHeight() && classes[i-1][j+1]==0)
 		{
-			if(isBlack(i-1, j+1))
+			if(isBlack(i-1, j+1) && classes[i-1][j+1]==0)
 			{
 				classes[i-1][j+1] = taksiPragmaton ; 
 				Integer[] coordinates = new Integer[2] ; 
@@ -161,7 +162,7 @@ public class Labeling {
 		}
 		if(i-1>=0 && classes[i-1][j]==0)
 		{
-			if(isBlack(i-1, j))
+			if(isBlack(i-1, j) && classes[i-1][j]==0)
 			{
 				classes[i-1][j] = taksiPragmaton ; 
 				Integer[] coordinates = new Integer[2] ; 
@@ -171,20 +172,44 @@ public class Labeling {
 			}
 		}
 	}
+	public int findOffsetWidth(int klass)
+	{
+		
+		int halfObjectWidth = (findRightMostForClass(klass)-findLeftMostForClass(klass)+1)/2;
+		int halfImageWidth=(originalImage.getWidth()/2) ;
+		int pointToStart = halfImageWidth-halfObjectWidth  ; 
+		int offSet = pointToStart-findLeftMostForClass(klass) ;  
+		
+		return offSet ;
+	}
+	
+	public int findOffsetHeight(int klass)
+	{
+		int halfObjectHeight = (findBotMostForClass(klass)-findTopMostForClass(klass)+1)/2 ;
+		int halfImageHeight  = (originalImage.getHeight()/2); 
+		int pointToStart = halfImageHeight-halfObjectHeight ; 
+		int offSet  = pointToStart - findTopMostForClass(klass); 
+		
+		return offSet ;
+	}
+	
+
+	
+	
 	
 	public void paintTheRegions(int klass,String tade)
 	{
-		returnImage  = new BufferedImage(subImageWidth, subImageWidth, originalImage.getType()) ;
+		returnImage  = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType()) ;
 		int newPixel ; 
 		int alpha = new Color(originalImage.getRGB(0, 0)).getAlpha()  ;
-		newPixel= GeneralImagingOperations.colorToRGB(alpha,155, 0, 0) ;
+		newPixel= GeneralImagingOperations.colorToRGB(alpha,0, 0, 0) ;
 		
-		int divisionWidth = originalImage.getWidth()/(subImageWidth) ;
-		int divisionHeight = originalImage.getHeight()/(subImageHeight) ;
+		//int divisionWidth = originalImage.getWidth()/(subImageWidth) ;
+		//int divisionHeight = originalImage.getHeight()/(subImageHeight) ;
 		
-		for(int i=0; i<subImageWidth; i++)
+		for(int i=0; i<originalImage.getWidth(); i++)
 		{
-			for(int j=0; j<subImageHeight; j++)
+			for(int j=0; j<originalImage.getHeight(); j++)
 			{
 				int alpha2 = new Color(originalImage.getRGB(0, 0)).getAlpha()  ;
 				int red = 255 ;
@@ -195,16 +220,21 @@ public class Labeling {
 			}
 		}
 		
+		
+		int offSetWidth = findOffsetWidth(klass) ; 
+		int offSetHeight = findOffsetHeight(klass) ;
+		
 		for(int i=0; i<originalImage.getWidth(); i++)
 		{
 			for(int j=0; j<originalImage.getHeight(); j++)
 			{
 				if(classes[i][j]==klass)
 				{
-					returnImage.setRGB(i/divisionWidth, j/divisionHeight, newPixel);
+					returnImage.setRGB(i+offSetWidth, j+offSetHeight, newPixel);
 				}
 			}
 		}
+		returnImage = imageScaling(returnImage, klass) ; 
 		try {
 			ImageIO.write(returnImage,"jpg", new File("images/subImage"+klass+tade+".jpg")) ;
 		} catch (IOException e) {
@@ -213,20 +243,56 @@ public class Labeling {
 		}
 	}
 	
+	public BufferedImage imageScaling(BufferedImage originalImage, int klass)
+	{
+		BufferedImage returnImage = new BufferedImage(subImageWidth, subImageWidth, originalImage.getType()) ; 
+		
+		int startingPointWidth = findStartingPointForReturnImage(originalImage.getWidth(), subImageWidth) ; 
+		int startingPointHeight = findStartingPointForReturnImage(originalImage.getHeight(), subImageHeight) ; 
+	 
+		for(int i=startingPointWidth, retImWidth=0 ; i<startingPointWidth+300; i++,retImWidth++)
+		{			
+			for(int j=startingPointHeight,retImageHeight=0; j<startingPointHeight+300; j++,retImageHeight++)
+			{
+				returnImage.setRGB(retImWidth, retImageHeight, originalImage.getRGB(i, j));
+			}
+		}
+		
+		return returnImage ; 
+	}
+	
+	
+	public int  findStartingPointForReturnImage(int originalImageValue, int returnImageValue)
+	{
+		int originalImageValueHalf = originalImageValue/2 ;
+		int returnImageValueHalf = returnImageValue/2 ; 
+		
+		int startingPoint = originalImageValueHalf - returnImageValueHalf;
+		
+		return startingPoint ; 
+	}
+	
+	
+	
+	
 	public int findRightMostForClass(int klass)
 	{
 		int max=0 ;
-		
-		for(int i=originalImage.getWidth()-1; i>=0; i--)
+		for(int i=0; i<originalImage.getWidth(); i++)
 		{
-			for(int j=originalImage.getHeight()-1; j>=0; j--)
+			for(int j=0; j<originalImage.getHeight(); j++)
 			{
-					if(classes[i][j]==klass && max<i)
-					{
-						max = i ; 
-					}
+				if(classes[i][j]==klass && i>max)
+				{
+					max=i ; 
+				}
 			}
 		}
+		
+		
+		
+		
+		
 		return max ; 
 	}
 	
@@ -322,7 +388,7 @@ public class Labeling {
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
 		BufferedImage image12=null;
-		String filetoread = "images/testSet/t10.jpg" ;
+		String filetoread = "images/output.jpg" ;
 		try{
 			image = ImageIO.read(new File(filetoread));
 			image12 = ThresHolding.grayImage2Bin(image) ;

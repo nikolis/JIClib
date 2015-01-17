@@ -24,11 +24,11 @@ public class TrainingNeuralNetworks {
 	ArrayList<Double> xe2 = new ArrayList<Double>(); 
 	int numberOfMoments = 30 ; 
 	
-	public void examples()
+	public void examples(int numberOfExample)
 	{
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
-		String imageToRead ="images/tests/t23.jpg" ;
+		String imageToRead ="images/tests/t"+String.valueOf(numberOfExample)+".jpg" ;
 		String name =imageToRead.substring(imageToRead.indexOf(".jpg")-2,imageToRead.indexOf(".jpg"))  ;
 		try{
 			image = ImageIO.read(new File(imageToRead));
@@ -89,6 +89,7 @@ public class TrainingNeuralNetworks {
 		BufferedImage image ; 
 		    for (int i = 0; i < listOfFiles.length; i++) 
 		    {
+		    	System.out.println(classToTrain);
 		      if (listOfFiles[i].isFile()) 
 		      {
 		        try {
@@ -118,10 +119,6 @@ public class TrainingNeuralNetworks {
 		}
 		
 	}
-	
-	
-	
-	
 	
 	
 	public void TrainingForAllClasses()
@@ -170,9 +167,9 @@ public class TrainingNeuralNetworks {
 	{
 		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\0\\subImage310.jpg") ; 
 		System.out.println(neuralNetwork.predict(this.x2));
-		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\1\\subImage2t3.jpg") ; 
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\0\\subImage3t9.jpg") ; 
 		System.out.println(neuralNetwork.predict(this.x2));
-		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\2\\subImage313.jpg") ; 
+		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\0\\subImage2t9.jpg") ; 
 		System.out.println(neuralNetwork.predict(this.x2));
 		createXandYsForSpesificImage("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\4\\subImage615.jpg") ; 
 		System.out.println(neuralNetwork.predict(this.x2));
@@ -192,13 +189,18 @@ public class TrainingNeuralNetworks {
 	
 	public static void main(String args[])
 	{
-		
-		//TODO NEXT THINK TO CHECK ZERNIKE MOMENTS COMPUTATION 
 		/*
-		NeuralNetwork nn = new NeuralNetwork() ;
-		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ; 
+		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ;
+		for(int i=1; i<=23; i++ )
+		{
+			tr.examples(i);
+		}*/
+		//TODO NEXT THINK TO CHECK ZERNIKE MOMENTS COMPUTATION 
 		
-		tr.examples();
+		/*
+		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ;
+		NeuralNetwork nn = new NeuralNetwork() ; 
+		
 		tr.TrainingForAllClasses();
 		tr.convertyx();
 		 
@@ -210,7 +212,7 @@ public class TrainingNeuralNetworks {
 		nn.loadTrainedThetas();
 		tr.testTheTestSet(nn);
 		
-		
+	
 	}
 	
 }

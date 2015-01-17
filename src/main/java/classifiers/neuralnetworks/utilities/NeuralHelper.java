@@ -15,7 +15,6 @@ import java.util.Random;
 import org.la4j.matrix.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
 import org.la4j.vector.Vector;
-import org.la4j.vector.Vectors;
 import org.la4j.vector.dense.BasicVector;
 
 public class NeuralHelper{
