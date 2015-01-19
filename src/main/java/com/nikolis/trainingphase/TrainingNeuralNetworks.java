@@ -194,10 +194,10 @@ public class TrainingNeuralNetworks {
 		for(int i=1; i<=23; i++ )
 		{
 			tr.examples(i);
-		}*/
+		}
 		//TODO NEXT THINK TO CHECK ZERNIKE MOMENTS COMPUTATION 
+		*/
 		
-		/*
 		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ;
 		NeuralNetwork nn = new NeuralNetwork() ; 
 		
@@ -206,9 +206,9 @@ public class TrainingNeuralNetworks {
 		 
 		nn.loadParameters(tr.x, tr.y);
 		nn.workingItOut(25, 0.001, 1, 10000, 14);
-		*/
-		TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ;
-		NeuralNetwork nn = new NeuralNetwork() ;
+		
+		//TrainingNeuralNetworks tr = new TrainingNeuralNetworks() ;
+		//NeuralNetwork nn = new NeuralNetwork() ;
 		nn.loadTrainedThetas();
 		tr.testTheTestSet(nn);
 		

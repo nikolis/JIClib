@@ -68,6 +68,7 @@ public class NeuralHelper{
 			String tempArr[] = temp.split(",");
 			for(int j=0; j<columns; j++)
 			{
+				
 				matrix.set(i, j, Double.parseDouble(tempArr[j]));
 			}
 		}

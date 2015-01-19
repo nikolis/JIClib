@@ -6,10 +6,14 @@ package classifiers.neuralnetworks.learning;
 import java.io.IOException;
 
 
+
+
 import classifiers.neuralnetworks.utilities.*;
 
 import org.la4j.matrix.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
+
+import com.nikolis.trainingphase.TrainingNeuralNetworks;
 
 
 
@@ -31,9 +35,9 @@ public class NeuralNetwork {
 	Matrix hipothesis ; 
 	Matrix alreadyTrainedTheta1 ; 
 	Matrix alreadyTrainedTheta2 ;
-	static final  int numberOfFeatures =30   ; 
-	static final int numberOfLabeles =14; 
-	static final int secondLayerUnits =25 ; 
+	static final  int numberOfFeatures =3   ; 
+	static final int numberOfLabeles =3; 
+	static final int secondLayerUnits =10 ; 
 	
 	/**
 	 * A method that loads the parameters x,y the main input of the neural network 
@@ -45,7 +49,7 @@ public class NeuralNetwork {
 	public void loadParameters(double x[][],double y[][])
 	{
 			this.X=new Basic2DMatrix(x);
-			this.Y= new Basic2DMatrix(y);		
+			this.Y= new Basic2DMatrix(y);
 	}
 	
 	
@@ -82,13 +86,18 @@ public class NeuralNetwork {
 		Theta1=NeuralHelper.createsRanomsMatrix(NeuralNetwork.secondLayerUnits, NeuralNetwork.numberOfFeatures+1);
 		Theta2=NeuralHelper.createsRanomsMatrix(NeuralNetwork.numberOfLabeles, NeuralNetwork.secondLayerUnits+1);
 		convertY(numberOfLabels);
-		
+		System.out.println("The y isss  : ");
+		NeuralHelper.printMatrix(Y);
+		System.out.println("The y isss  : ");
 		for(int i=0; i<numOfIterations; i++)
 		{
 			feedForward(lambda);
 			Theta1= Theta1.subtract(Theta1_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
 			Theta2= Theta2.subtract(Theta2_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
 			System.out.println(computeCost(hipothesis, lambda)+" at the Iteration : "+i);
+			System.out.println("The prediction is ");
+			NeuralHelper.printMatrix(hipothesis);
+			System.out.println("--------------------------->");
 		}
 		try
 		{
@@ -114,13 +123,14 @@ public class NeuralNetwork {
 		alreadyTrainedTheta1 = new Basic2DMatrix(NeuralNetwork.secondLayerUnits,NeuralNetwork.numberOfFeatures+1); 
 		alreadyTrainedTheta2 = new Basic2DMatrix(NeuralNetwork.numberOfLabeles,NeuralNetwork.secondLayerUnits+1);
 		try {
-			NeuralHelper.loadCsvFileInMatrix("Theta1.csv", alreadyTrainedTheta1.rows(), alreadyTrainedTheta1.columns()) ;
-			NeuralHelper.loadCsvFileInMatrix("Theta2.csv", alreadyTrainedTheta2.rows(), alreadyTrainedTheta2.columns()) ;
+			alreadyTrainedTheta1=NeuralHelper.loadCsvFileInMatrix("Theta1.csv", alreadyTrainedTheta1.rows(), alreadyTrainedTheta1.columns()) ;
+			alreadyTrainedTheta2=NeuralHelper.loadCsvFileInMatrix("Theta2.csv", alreadyTrainedTheta2.rows(), alreadyTrainedTheta2.columns()) ;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		NeuralHelper.printMatrix(alreadyTrainedTheta1);
+		NeuralHelper.printMatrix(alreadyTrainedTheta2);
 	}
 	
 	
@@ -128,29 +138,50 @@ public class NeuralNetwork {
 	public int  predict(double Xin[][])
 	{
 		Matrix X = new Basic2DMatrix(Xin);
+		
 		Matrix a1 = NeuralHelper.addBias(X);
-	
 		Matrix z2 = a1.multiply(alreadyTrainedTheta1.transpose()) ;
 		Matrix a2 = NeuralHelper.sigmoid(z2);
 		a2=NeuralHelper.addBias(a2);
 		Matrix z3 = a2.multiply(alreadyTrainedTheta2.transpose()) ;
 		Matrix a3 = NeuralHelper.sigmoid(z3);
-		
-		int max=-1 ; 
-		double maxValue = -1 ; 
-			for(int j=0; j<a3.rows(); j++)
+		hipothesis=a3 ;
+		NeuralHelper.printMatrix(hipothesis);
+		double max =-1 ; 
+		int maxPosition =-1 ; 
+		for(int i=0; i<hipothesis.columns(); i++)
+		{
+			if(max<hipothesis.get(0, i))
 			{
-				for(int i=0; i<a3.columns();i++)
-				{
-					if(a3.get(j,i)>=maxValue)
-					{
-						maxValue=a3.get(j,i);
-						max = i ;
-					}
-				}
+				max=hipothesis.get(0, i) ;
+				maxPosition=i;
 			}
-			
-		return max;
+		}
+		return maxPosition ; 
+	}
+	public int  predict2(double Xin[][])
+	{
+		Matrix X = new Basic2DMatrix(Xin);
+		
+		Matrix a1 = NeuralHelper.addBias(X);
+		Matrix z2 = a1.multiply(Theta1.transpose()) ;
+		Matrix a2 = NeuralHelper.sigmoid(z2);
+		a2=NeuralHelper.addBias(a2);
+		Matrix z3 = a2.multiply(Theta2.transpose()) ;
+		Matrix a3 = NeuralHelper.sigmoid(z3);
+		hipothesis=a3 ;
+		NeuralHelper.printMatrix(hipothesis);
+		double max =-1 ; 
+		int maxPosition =-1 ; 
+		for(int i=0; i<hipothesis.columns(); i++)
+		{
+			if(max<hipothesis.get(0, i))
+			{
+				max=hipothesis.get(0, i) ;
+				maxPosition=i;
+			}
+		}
+		return maxPosition ; 
 	}
 	
 	
@@ -193,7 +224,7 @@ public class NeuralNetwork {
 		Matrix z3 = a2.multiply(Theta2.transpose()) ;
 		Matrix a3 = NeuralHelper.sigmoid(z3);
 		hipothesis=a3 ;
-	
+		
 		Matrix delta3 = a3.subtract(Y) ;
 		Matrix temp = NeuralHelper.combineTwoMatrix(NeuralHelper.createOnesMatrix(z2.rows(), 1),z2);
 		Matrix delta2 = delta3.multiply(Theta2).hadamardProduct(NeuralHelper.sigmoidGradient(temp)) ;
@@ -281,6 +312,37 @@ public class NeuralNetwork {
 	
 	public static void main(String args[])
 	{
+
+		NeuralNetwork nn = new NeuralNetwork() ;
+		double theXis[][] = new double[3][3];
+		theXis[0][0]=1.1652623 ; 
+		theXis[0][1]=2.42552 ;
+		theXis[0][2]=3.6532365 ; 
+		
+		theXis[1][0]=11.62363 ; 
+		theXis[1][1]=12.6431136 ;
+		theXis[1][2]=13.19841875 ; 
+		
+		theXis[2][0]=33.13656143 ; 
+		theXis[2][1]=34.136616 ;
+		theXis[2][2]=35.136634643 ; 
+		
+		double theYis[][] = new double[3][1] ;
+		
+		theYis[0][0]=0;
+		theYis[1][0]=1;
+		theYis[2][0]=2;
+		 
+		nn.loadParameters(theXis, theYis);
+		nn.workingItOut(3, 0.01, 1, 100000, 3);
+		
+		double testX[][] = new double[1][3] ;
+		testX[0][0]=11.62363 ; 
+		testX[0][1]=12.6431136 ;
+		testX[0][2]=13.19841875 ; 
+		
+		//nn.loadTrainedThetas();
+		System.out.println(nn.predict2(testX)) ;
 		
 	}
 	
