@@ -72,6 +72,7 @@ public class NeuralNetwork {
 		convertY(numberOfLabels);
 		System.out.println("The y isss  : ");
 		NeuralHelper.printMatrix(Y);
+		//NeuralHelper.printMatrix(X);
 		System.out.println("The y isss  : ");
 		for(int i=0; i<numOfIterations; i++)
 		{
@@ -117,7 +118,7 @@ public class NeuralNetwork {
 	
 	
 	
-	public int  predict(double Xin[][])
+	/*public int  predict(double Xin[][])
 	{
 		Matrix X = new Basic2DMatrix(Xin);
 		
@@ -140,7 +141,7 @@ public class NeuralNetwork {
 			}
 		}
 		return maxPosition ; 
-	}
+	}*/
 	
 	public int  predict2(double Xin[][])
 	{

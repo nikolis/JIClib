@@ -179,7 +179,7 @@ public class GenerateFeatureMatrices {
 		double[][] array =null ;
 		try {
 			matfilereader = new MatFileReader(fileName);
-			MLDouble heta = (MLDouble)matfilereader.getMLArray("X");
+			MLDouble heta = (MLDouble)matfilereader.getMLArray(arrayName);
 			
 			array = heta.getArray() ; 
 		}catch (Exception e){
