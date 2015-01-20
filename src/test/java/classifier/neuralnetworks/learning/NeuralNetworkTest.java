@@ -14,7 +14,7 @@ import classifiers.neuralnetworks.learning.NeuralNetwork;
  */
 public class NeuralNetworkTest {
 	
-	public static void main(String args[])
+	/*public static void main(String args[])
 	{
 		NeuralNetwork nncost = new NeuralNetwork();
 		try {
@@ -36,5 +36,5 @@ public class NeuralNetworkTest {
 	
 		//nncost.loadParameters(x, y);
 		nncost.workingItOut(25,10,0.001,1,500000000);
-	}
+	}*/
 }

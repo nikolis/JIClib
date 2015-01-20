@@ -35,9 +35,9 @@ public class NeuralNetwork {
 	Matrix hipothesis ; 
 	Matrix alreadyTrainedTheta1 ; 
 	Matrix alreadyTrainedTheta2 ;
-	static final  int numberOfFeatures =3   ; 
-	static final int numberOfLabeles =3; 
-	static final int secondLayerUnits =10 ; 
+	static final  int numberOfFeatures =30   ; 
+	static final int numberOfLabeles =14; 
+	static final int secondLayerUnits =50 ; 
 	
 	/**
 	 * A method that loads the parameters x,y the main input of the neural network 
@@ -54,22 +54,6 @@ public class NeuralNetwork {
 	
 	
 	/**
-	 * Same method  as previous just adds the possibility of entering the Theta terms already trained 
-	 * in order to give the implementation the possibility to later use advanced optimization methods.
-	 * @param x
-	 * @param y
-	 * @param theta1
-	 * @param theta2
-	 */
-	public void loadParameters(double x[][],double y[][],double theta1[][],double theta2[][])
-	{
-			this.X=new Basic2DMatrix(x);
-			this.Y= new Basic2DMatrix(y);
-			Theta1 = new Basic2DMatrix(theta1);
-			Theta2 = new Basic2DMatrix(theta2);	
-	}
-	
-	/**
 	 * This is a method implementing the gradient Descent algorithm witch is an algorithm
 	 * that iterates as many times as inputed in numOfIteration in order to reduce the cost j of our hipothesis 
 	 *it simple does that by performing feedforward and the subtract the gradient computed from the error terms 
@@ -80,7 +64,7 @@ public class NeuralNetwork {
 	 * @param lambda
 	 * @param numOfIterations
 	 */
-	public void workingItOut(int secondLayerUnits,double alpha,double lambda,int numOfIterations,int numberOfLabels)
+	public void batchGradientDescemt(int secondLayerUnits,double alpha,double lambda,int numOfIterations,int numberOfLabels)
 	{
 		//TODO CREATE RANDOM TO RPEVENT SYMETRY 
 		Theta1=NeuralHelper.createsRanomsMatrix(NeuralNetwork.secondLayerUnits, NeuralNetwork.numberOfFeatures+1);
@@ -96,8 +80,6 @@ public class NeuralNetwork {
 			Theta2= Theta2.subtract(Theta2_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
 			System.out.println(computeCost(hipothesis, lambda)+" at the Iteration : "+i);
 			System.out.println("The prediction is ");
-			NeuralHelper.printMatrix(hipothesis);
-			System.out.println("--------------------------->");
 		}
 		try
 		{
@@ -159,6 +141,7 @@ public class NeuralNetwork {
 		}
 		return maxPosition ; 
 	}
+	
 	public int  predict2(double Xin[][])
 	{
 		Matrix X = new Basic2DMatrix(Xin);
@@ -300,7 +283,6 @@ public class NeuralNetwork {
 		}
 		
 		Matrix ones = NeuralHelper.createOnesMatrix(Y.rows(), Y.columns()) ;
-		
 		Matrix temp = Y.multiply(-1);
 		temp= temp.hadamardProduct(hipothesis) ; 
 		Matrix	temp2 = ones.subtract(Y).hadamardProduct(hipothesislogminus) ;
@@ -334,7 +316,7 @@ public class NeuralNetwork {
 		theYis[2][0]=2;
 		 
 		nn.loadParameters(theXis, theYis);
-		nn.workingItOut(3, 0.01, 1, 100000, 3);
+		nn.batchGradientDescemt(3, 0.01, 1, 100000, 3);
 		
 		double testX[][] = new double[1][3] ;
 		testX[0][0]=11.62363 ; 
