@@ -19,7 +19,7 @@ public class TrainingNeuralNetworks {
 				System.out.println(Y[i][j]);
 			}
 		}
-		NeuralNetwork nn = new NeuralNetwork() ; 
+		NeuralNetwork nn = new NeuralNetwork(3) ; 
 		nn.loadParameters(X, Y);
 		nn.batchGradientDescemt(25, 0.001, 1, 1000, 14);
 	}

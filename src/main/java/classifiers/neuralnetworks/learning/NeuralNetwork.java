@@ -8,6 +8,8 @@ import java.io.IOException;
 
 
 
+import java.security.AllPermission;
+
 import classifiers.neuralnetworks.utilities.*;
 
 import org.la4j.matrix.Matrix;
@@ -38,6 +40,52 @@ public class NeuralNetwork {
 	static final  int numberOfFeatures =30   ; 
 	static final int numberOfLabeles =14; 
 	static final int secondLayerUnits =50 ; 
+	Matrix[] allTheAs ; 
+	Matrix[] allTheDs ;
+	Matrix[] alltheds ;
+	Matrix[] alltheThetas ; 
+	Matrix[] allTheThetaGreds ; 
+	Matrix[] allTheRegTerms ; 
+	int numberOfLayers ; 
+	
+	public NeuralNetwork(int numberOfLayers) {
+		allTheAs = new Matrix[numberOfLayers] ; 
+		allTheDs = new Matrix[numberOfLayers-1] ; 
+		alltheThetas= new Matrix[numberOfLayers-1] ;
+		allTheThetaGreds = new Matrix[numberOfLayers-1] ;
+		alltheds = new Matrix[numberOfLayers-1] ;
+		allTheRegTerms = new Matrix[numberOfLayers-1] ; 
+		this.numberOfLayers=numberOfLayers ; 
+	}
+	/**
+	 * This function is performing the feed forward  and calculates the delta terms and the gradients for the 
+	 * Theta matrixes containing the weight that is going to be used in our hipothesis.
+	 * @param lambda
+	 */
+	public void feedForward(double lambda)
+	{		
+		Matrix a1 = NeuralHelper.addBias(X);
+		Matrix z2 = a1.multiply(Theta1.transpose()) ;
+		Matrix a2 = NeuralHelper.sigmoid(z2);
+		a2=NeuralHelper.addBias(a2);
+		Matrix z3 = a2.multiply(Theta2.transpose()) ;
+		Matrix a3 = NeuralHelper.sigmoid(z3);
+		hipothesis=a3 ;
+		
+		Matrix delta3 = a3.subtract(Y) ;
+		Matrix temp = NeuralHelper.combineTwoMatrix(NeuralHelper.createOnesMatrix(z2.rows(), 1),z2);
+		Matrix delta2 = delta3.multiply(Theta2).hadamardProduct(NeuralHelper.sigmoidGradient(temp)) ;
+		Matrix delta22 = NeuralHelper.returnAllRowsAndGivenCollumns(delta2, 1);
+		Matrix regularization =NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(Theta1.rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(Theta1, 1)).multiply(lambda/X.rows()) ;
+		Matrix regularization2 =NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(Theta2.rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(Theta2, 1)).multiply(lambda/X.rows()) ;
+	
+		Matrix Delta1 = delta22.transpose().multiply(a1) ;
+		Matrix Delta2 = delta3.transpose().multiply(a2) ; 
+		
+		Theta1_grad=Delta1.divide(X.rows()).add(regularization) ; 
+		Theta2_grad=Delta2.divide(X.rows()).add(regularization2);
+	}
+	
 	
 	/**
 	 * A method that loads the parameters x,y the main input of the neural network 
@@ -192,36 +240,7 @@ public class NeuralNetwork {
 		}
 		Y=realY ; 
 	}
-	/**
-	 * This function is performing the feed forward  and calculates the delta terms and the gradients for the 
-	 * Theta matrixes containing the weight that is going to be used in our hipothesis.
-	 * 
-	 * 
-	 * @param lambda
-	 */
-	public void feedForward(double lambda)
-	{		
-		Matrix a1 = NeuralHelper.addBias(X);
-		Matrix z2 = a1.multiply(Theta1.transpose()) ;
-		Matrix a2 = NeuralHelper.sigmoid(z2);
-		a2=NeuralHelper.addBias(a2);
-		Matrix z3 = a2.multiply(Theta2.transpose()) ;
-		Matrix a3 = NeuralHelper.sigmoid(z3);
-		hipothesis=a3 ;
-		
-		Matrix delta3 = a3.subtract(Y) ;
-		Matrix temp = NeuralHelper.combineTwoMatrix(NeuralHelper.createOnesMatrix(z2.rows(), 1),z2);
-		Matrix delta2 = delta3.multiply(Theta2).hadamardProduct(NeuralHelper.sigmoidGradient(temp)) ;
-		Matrix delta22 = NeuralHelper.returnAllRowsAndGivenCollumns(delta2, 1);
-		Matrix regularization =NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(Theta1.rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(Theta1, 1)).multiply(lambda/X.rows()) ;
-		Matrix regularization2 =NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(Theta2.rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(Theta2, 1)).multiply(lambda/X.rows()) ;
 	
-		Matrix Delta1 = delta22.transpose().multiply(a1) ;
-		Matrix Delta2 = delta3.transpose().multiply(a2) ; 
-		
-		Theta1_grad=Delta1.divide(X.rows()).add(regularization) ; 
-		Theta2_grad=Delta2.divide(X.rows()).add(regularization2);
-	}
 	/**
 	 * This is method is used to compute the regularization terms  that is going to be added to the gradient in order
 	 * to help us control the problem of overfiting . 
@@ -296,7 +315,7 @@ public class NeuralNetwork {
 	public static void main(String args[])
 	{
 
-		NeuralNetwork nn = new NeuralNetwork() ;
+		NeuralNetwork nn = new NeuralNetwork(3) ;
 		double theXis[][] = new double[3][3];
 		theXis[0][0]=1.1652623 ; 
 		theXis[0][1]=2.42552 ;
