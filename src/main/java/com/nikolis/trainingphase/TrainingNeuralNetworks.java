@@ -17,19 +17,14 @@ public class TrainingNeuralNetworks {
 	{
 		this.X=GenerateFeatureMatrices.readMatFile("trainingset.mat", "X");
 		this.Y=GenerateFeatureMatrices.readMatFile("trainingset.mat", "Y");
-		for(int i=0; i<Y.length; i++)
-		{
-			for(int j=0; j<Y[i].length; j++)
-			{
-				System.out.println(Y[i][j]);
-			}
-		}
+		
 		ArrayList<Integer> thenn =  new ArrayList<Integer>() ;
 		thenn.add(30);
 		thenn.add(25);
-		thenn.add(14);
- 		NeuralNetwork nn = new NeuralNetwork(thenn) ; 
+		thenn.add(14); 
+		NeuralNetwork nn = new NeuralNetwork(thenn) ; 
 		nn.loadParameters(X, Y);
+		
 		nn.batchGradientDescemt(25, 0.001, 1, 1000, 14);
 	}
 	

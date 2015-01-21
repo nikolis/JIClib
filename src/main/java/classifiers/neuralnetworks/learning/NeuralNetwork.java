@@ -40,7 +40,7 @@ public class NeuralNetwork {
 	Matrix alreadyTrainedTheta2 ;
 	static final  int numberOfFeatures =30   ; 
 	static final int numberOfLabeles =14; 
-	static final int secondLayerUnits =50 ; 
+	static final int secondLayerUnits =25 ; 
 	Matrix[] allTheAs ; 
 	Matrix[] allTheDs ;
 	Matrix[] alltheds ;
@@ -66,7 +66,7 @@ public class NeuralNetwork {
 	 * @param lambda
 	 */
 	public void feedForward(double lambda)
-	{		
+	{	
 		Matrix a1 = NeuralHelper.addBias(X);
 		Matrix z2 = a1.multiply(Theta1.transpose()) ;
 		
@@ -79,13 +79,15 @@ public class NeuralNetwork {
 		
 		allTheAs[0]=X ;
 		
+		
 		for(int i=1; i<allTheAs.length; i++)
 		{
 			allTheAs[i]= NeuralHelper.addBias(allTheAs[i-1]) ;
-			allTheZs[i]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
+			allTheZs[i-1]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
 			//allTheAs[i]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
-			allTheAs[i]=NeuralHelper.sigmoid(allTheZs[i]) ;
+			allTheAs[i]=NeuralHelper.sigmoid(allTheZs[i-1]) ;
 		}
+		
 		
 		System.out.println("The hipothesis 1 : ");
 		System.out.println(allTheAs[allTheAs.length-1]);
@@ -95,40 +97,62 @@ public class NeuralNetwork {
 		
 		Matrix delta3 = a3.subtract(Y) ;
 		
-		alltheds[0] = allTheAs[allTheAs.length-1].subtract(Y) ;
+		
 		
 		Matrix temp = NeuralHelper.combineTwoMatrix(NeuralHelper.createOnesMatrix(z2.rows(), 1),z2);
 		Matrix delta2 = delta3.multiply(Theta2).hadamardProduct(NeuralHelper.sigmoidGradient(temp)) ;
 		Matrix delta22 = NeuralHelper.returnAllRowsAndGivenCollumns(delta2, 1);
 		
-		for(int i=1; i<alltheds.length; i++)
+		alltheds[alltheds.length-1] = allTheAs[allTheAs.length-1].subtract(Y) ;
+		
+		
+		
+		for(int i=alltheds.length-2; i>=0; i--)
 		{
 			Matrix temperor = NeuralHelper.combineTwoMatrix(NeuralHelper.createOnesMatrix(allTheZs[i].rows(), 1),allTheZs[i]) ;
-			alltheds[i]= alltheds[i-1].multiply()
+			System.out.println(i);
+			Matrix temp2 = alltheds[i+1].multiply(alltheThetas[i+1]) ;
+			alltheds[i]= temp2.hadamardProduct(NeuralHelper.sigmoidGradient(temperor)) ; 
 			alltheds[i]=NeuralHelper.returnAllRowsAndGivenCollumns(alltheds[i], 1) ;
 		}
 		
 		Matrix regularization =NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(Theta1.rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(Theta1, 1)).multiply(lambda/X.rows()) ;
 		Matrix regularization2 =NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(Theta2.rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(Theta2, 1)).multiply(lambda/X.rows()) ;
+	
+		
 		
 		for(int i=0; i<allTheRegTerms.length; i++)
 		{
-			allTheRegTerms[i] = NeuralHelper.combineTwoMatrix(NeuralHelper.createOnesMatrix(alltheThetas[i].rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(alltheThetas[i], 1)).multiply(lambda/X.rows()) ;
+			allTheRegTerms[i] = NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(alltheThetas[i].rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(alltheThetas[i], 1)).multiply(lambda/X.rows()) ;
 		}
+		
+				
+				
+				
 		for(int i=0; i<allTheDs.length; i++)
 		{
-			allTheDs[i] = alltheds[i+1].transpose().multiply(allTheAs[i]) ; 
+			allTheDs[i] =  alltheds[i].transpose() ;
+			allTheDs[i] = allTheDs[i].multiply(NeuralHelper.addBias(allTheAs[i])) ; 
 		}
+		
+		
+		Matrix Delta1 = delta22.transpose().multiply(a1) ;
+		Matrix Delta2 = delta3.transpose().multiply(a2) ; 
+		
+		
 		for(int i=0; i<allTheThetaGreds.length; i++)
 		{
 			allTheThetaGreds[i]=allTheDs[i].divide(X.rows()).add(allTheRegTerms[i]) ;
 		}
 		
-		Matrix Delta1 = delta22.transpose().multiply(a1) ;
-		Matrix Delta2 = delta3.transpose().multiply(a2) ; 
 		
 		Theta1_grad=Delta1.divide(X.rows()).add(regularization) ; 
 		Theta2_grad=Delta2.divide(X.rows()).add(regularization2);
+		
+		
+		NeuralHelper.printMatrix(allTheThetaGreds[1]);
+		System.out.println("--------------------------");
+		NeuralHelper.printMatrix(Theta2_grad);
 	}
 	
 	
@@ -165,17 +189,22 @@ public class NeuralNetwork {
 			alltheThetas[i]=NeuralHelper.createsRanomsMatrix(this.neuralNetwork.get(i+1), neuralNetwork.get(i)+1) ; 
 		}
 		
-		Theta1=NeuralHelper.createsRanomsMatrix(NeuralNetwork.secondLayerUnits, NeuralNetwork.numberOfFeatures+1);
-		Theta2=NeuralHelper.createsRanomsMatrix(NeuralNetwork.numberOfLabeles, NeuralNetwork.secondLayerUnits+1);
+		Theta1=alltheThetas[0];
+		Theta2=alltheThetas[1];
+	
 		convertY(numberOfLabels);
-		System.out.println("The y isss  : ");
-		NeuralHelper.printMatrix(Y);
-		System.out.println("The y isss  : ");
 		for(int i=0; i<numOfIterations; i++)
 		{
+			
+			
 			feedForward(lambda);
 			Theta1= Theta1.subtract(Theta1_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
 			Theta2= Theta2.subtract(Theta2_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
+			
+			for(int j=0; j<alltheThetas.length; j++)
+			{
+				alltheThetas[j] = alltheThetas[j].subtract(allTheThetaGreds[j].multiply(alpha).multiply(computeCost(hipothesis, lambda))) ; 
+			}
 			System.out.println(computeCost(hipothesis, lambda)+" at the Iteration : "+i);
 			System.out.println("The prediction is ");
 		}
