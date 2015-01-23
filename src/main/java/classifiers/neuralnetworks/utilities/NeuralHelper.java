@@ -76,7 +76,18 @@ public class NeuralHelper{
 	}
 	
 	
-	
+	public static double[][]  matrix2Array(Matrix matrix)
+	{
+		double[][] array = new double[matrix.rows()][matrix.columns()];
+		for(int i=0; i<matrix.rows(); i++)
+		{
+			for(int j=0; j<matrix.columns(); j++)
+			{
+				array[i][j]=matrix.get(i, j);
+			}
+		}
+		return array ; 
+	}
 	
 	/**
 	 * Basically add's one more column at the beginning of the matrix to

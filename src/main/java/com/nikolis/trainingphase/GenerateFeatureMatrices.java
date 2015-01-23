@@ -3,11 +3,16 @@ package com.nikolis.trainingphase;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.rmi.server.ExportException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.imageio.ImageIO;
 
+
+
+
+import org.la4j.matrix.Matrix;
 
 import com.jmatio.io.MatFileReader;
 import com.jmatio.io.MatFileWriter;
@@ -31,7 +36,7 @@ public class GenerateFeatureMatrices {
 	}
 	
 	
-	private void exportTheMatrices(ArrayList<Double> examplesClasses, ArrayList<ArrayList<Double>> examplesFeatures,String trainSetFileName)
+	private  void exportTheMatrices(ArrayList<Double> examplesClasses, ArrayList<ArrayList<Double>> examplesFeatures,String trainSetFileName)
 	{
 		addArrayListToMlarray(examplesClasses, "Y");
 		addArrayListToMlarray2(examplesFeatures, "X");
@@ -42,6 +47,27 @@ public class GenerateFeatureMatrices {
 			e.printStackTrace();
 		} 
 	}
+	
+	public static void exportTheMatricesGeneral(double[][] array1 , double[][] array2,String nameArray1, String nameArray2, String nameFile)
+	{
+		Collection<MLArray>  collectionMl = new ArrayList<MLArray>();
+		
+		MLArray mlArray1 = new MLDouble(nameArray1,array1) ;
+		MLArray mlArray2 = new MLDouble(nameArray2,array2) ;
+		
+		
+		collectionMl.add(mlArray1) ;
+		collectionMl.add(mlArray2) ;
+		
+		try {
+			MatFileWriter matWriter = new MatFileWriter() ;
+			matWriter.write(nameFile, collectionMl);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	}
+	
+	
 	/**
 	 * Adds an arrayList of doubles in an ml array which will afterwords will be 
 	 * saved in a .mat file 
@@ -65,7 +91,7 @@ public class GenerateFeatureMatrices {
 		collectionMl.add(mlArray) ;
 	}
 	
-	private double[][] convertArrayListToNormalArray(ArrayList<Double> arrayList)
+	static double[][] convertArrayListToNormalArray(ArrayList<Double> arrayList)
 	{
 		double[][] normalArray = new double[arrayList.size()][1] ; 
 		
@@ -118,7 +144,7 @@ public class GenerateFeatureMatrices {
 	}
 	
 	
-	private void generateCsvOfExamples()
+	private void createExampleFeatureAndClassesArrays()
 	{
 		creatingXandYs("0");
 		creatingXandYs("1");
@@ -190,7 +216,7 @@ public class GenerateFeatureMatrices {
 	
 	public void exportTrainingSetMatrices(String name)
 	{
-		generateCsvOfExamples() ;
+		createExampleFeatureAndClassesArrays() ;
 		exportTheMatrices(examplesClasses, examplesFeatures, name);
 	}
 	
