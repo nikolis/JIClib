@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 
 
+
 import org.la4j.matrix.Matrix;
 
 import com.jmatio.io.MatFileReader;
@@ -19,6 +20,7 @@ import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLDouble;
 
+import featureexctraction.ProjectionHistogram;
 import featureexctraction.ZernikeMoments;
 
 public class GenerateFeatureMatrices {
@@ -79,6 +81,7 @@ public class GenerateFeatureMatrices {
 		MLArray mlArray = new MLDouble(name,convertArrayListToNormalArray(arrayList) ) ;
 		collectionMl.add(mlArray) ;	 
 	}
+	
 	/**
 	 * Adds an arrayList of arrayLists of doubles in an ml array which will afterwards will be 
 	 * saved in a .mat file 
@@ -119,7 +122,7 @@ public class GenerateFeatureMatrices {
 	
 	
 	
-	private void creatingXandYs(String classToTrain)
+	private void creatingXandYsZernike(String classToTrain)
 	{	
 		ZernikeMoments zernMom ;
 		File folder = new File("images/"+classToTrain);
@@ -143,23 +146,63 @@ public class GenerateFeatureMatrices {
 		    }
 	}
 	
+	private void creatingXandYsHistogram(String classToTrain)
+	{	
+		File folder = new File("images/"+classToTrain);
+		File[] listOfFiles = folder.listFiles();
+		BufferedImage image ; 
+		    for (int i = 0; i < listOfFiles.length; i++) 
+		    {
+		    	System.out.println(classToTrain);
+		      if (listOfFiles[i].isFile()) 
+		      {
+		        try {
+		        	image = ImageIO.read(listOfFiles[i]) ;
+		        	examplesFeatures.add(ProjectionHistogram.findVerticalHistogram(image)) ;
+		        	examplesClasses.add((double)getclassNumber(classToTrain));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		      } 
+		    }
+	}
 	
-	private void createExampleFeatureAndClassesArrays()
+	
+	private void createExampleFeatureAndClassesArraysZernike()
 	{
-		creatingXandYs("0");
-		creatingXandYs("1");
-		creatingXandYs("2");
-		creatingXandYs("3");
-		//creatingXandYs("4");
-		//creatingXandYs("5");
-		//creatingXandYs("6");
-		//creatingXandYs("7");
-		//creatingXandYs("8");
-		//creatingXandYs("9");
-		//creatingXandYs("divide");
-		//creatingXandYs("multiply");
-		//creatingXandYs("pavla");
-		//creatingXandYs("plus");
+		creatingXandYsZernike("0");
+		creatingXandYsZernike("1");
+		creatingXandYsZernike("2");
+		creatingXandYsZernike("3");
+		creatingXandYsZernike("4");
+		creatingXandYsZernike("5");
+		creatingXandYsZernike("6");
+		creatingXandYsZernike("7");
+		creatingXandYsZernike("8");
+		creatingXandYsZernike("9");
+		creatingXandYsZernike("divide");
+		creatingXandYsZernike("multiply");
+		creatingXandYsZernike("pavla");
+		creatingXandYsZernike("plus");
+		
+	}
+
+	private void createExampleFeatureAndClassesArraysHistogram()
+	{
+		creatingXandYsHistogram("0");
+		creatingXandYsHistogram("1");
+		creatingXandYsHistogram("2");
+		creatingXandYsHistogram("3");
+		creatingXandYsHistogram("4");
+		creatingXandYsHistogram("5");
+		creatingXandYsHistogram("6");
+		creatingXandYsHistogram("7");
+		creatingXandYsHistogram("8");
+		creatingXandYsHistogram("9");
+		creatingXandYsHistogram("divide");
+		creatingXandYsHistogram("multiply");
+		creatingXandYsHistogram("pavla");
+		creatingXandYsHistogram("plus");
 		
 	}
 	
@@ -216,7 +259,8 @@ public class GenerateFeatureMatrices {
 	
 	public void exportTrainingSetMatrices(String name)
 	{
-		createExampleFeatureAndClassesArrays() ;
+		//createExampleFeatureAndClassesArraysZernike();
+		createExampleFeatureAndClassesArraysHistogram();
 		exportTheMatrices(examplesClasses, examplesFeatures, name);
 	}
 	

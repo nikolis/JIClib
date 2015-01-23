@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import classifiers.neuralnetworks.learning.NeuralNetwork;
+import featureexctraction.ProjectionHistogram;
 import featureexctraction.ZernikeMoments;
 
 
@@ -25,14 +26,14 @@ public class TrainingNeuralNetworks {
 		this.Y=GenerateFeatureMatrices.readMatFile("trainingSet.mat", "Y");
 		
 		ArrayList<Integer> thenn =  new ArrayList<Integer>() ;
-		thenn.add(30);
+		thenn.add(300);
 		thenn.add(25);
 		thenn.add(25);
-		thenn.add(4); 
+		thenn.add(14); 
 		NeuralNetwork nn = new NeuralNetwork(thenn) ; 
 		nn.loadParameters(X, Y);
 		
-		nn.batchGradientDescemt(25, 0.001, 1, 50000, 4);
+		nn.batchGradientDescemt(25, 0.001, 1, 5000, 14);
 	}
 	
 	public void generateTrainSetMatrices()
@@ -41,23 +42,30 @@ public class TrainingNeuralNetworks {
 		genfet.exportTrainingSetMatrices("trainingset.mat") ; 
 	}
 	
-	public int  predict(String pathToPic)
+	public int  predict(String pathToPic, int i)
 	{
+		ArrayList<Double> feature ; 
 		int prediction =-1 ; 
 		ZernikeMoments zernMom ;
 		BufferedImage image ; 
 		ArrayList<Integer> thenn =  new ArrayList<Integer>() ;
-		thenn.add(30);
+		thenn.add(300);
 		thenn.add(25);
 		thenn.add(25);
-		thenn.add(4); 
+		thenn.add(14); 
 		NeuralNetwork nn = new NeuralNetwork(thenn) ; 
 		try {
 			image = ImageIO.read(new File(pathToPic)) ;
-			zernMom = new ZernikeMoments(image);
-			ArrayList<Double> moments = zernMom.mainProcces(10, 1);
-			System.out.println(GenerateFeatureMatrices.convertArrayListToNormalArray(moments).length) ; 
-			prediction = nn.predict(GenerateFeatureMatrices.convertArrayListToNormalArray(moments));
+			if(i==0)
+			{
+				zernMom = new ZernikeMoments(image);
+				feature = zernMom.mainProcces(10, 1);
+			}else
+			{
+				feature = ProjectionHistogram.findVerticalHistogram(image);
+			}
+			System.out.println(GenerateFeatureMatrices.convertArrayListToNormalArray(feature).length) ; 
+			prediction = nn.predict(GenerateFeatureMatrices.convertArrayListToNormalArray(feature));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -68,8 +76,8 @@ public class TrainingNeuralNetworks {
 	{
 		TrainingNeuralNetworks trnn = new TrainingNeuralNetworks() ; 
 		//trnn.generateTrainSetMatrices();
-		trnn.trainNeuralNetWork(); 
-		//System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\0\\subImage2t9.jpg"));
+		//trnn.trainNeuralNetWork(); 
+		System.out.println(trnn.predict("/home/nikolis/git/SolveIT/images/8/subImage2019.jpg",1));
 		
 	}
 	
