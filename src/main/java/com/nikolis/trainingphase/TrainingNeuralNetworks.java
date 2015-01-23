@@ -21,18 +21,18 @@ public class TrainingNeuralNetworks {
 	
 	public void trainNeuralNetWork()
 	{
-		this.X=GenerateFeatureMatrices.readMatFile("trainingset.mat", "X");
-		this.Y=GenerateFeatureMatrices.readMatFile("trainingset.mat", "Y");
+		this.X=GenerateFeatureMatrices.readMatFile("trainingSet.mat", "X");
+		this.Y=GenerateFeatureMatrices.readMatFile("trainingSet.mat", "Y");
 		
 		ArrayList<Integer> thenn =  new ArrayList<Integer>() ;
 		thenn.add(30);
 		thenn.add(25);
 		thenn.add(25);
-		thenn.add(14); 
+		thenn.add(4); 
 		NeuralNetwork nn = new NeuralNetwork(thenn) ; 
 		nn.loadParameters(X, Y);
 		
-		nn.batchGradientDescemt(25, 0.001, 1, 5000, 14);
+		nn.batchGradientDescemt(25, 0.001, 1, 50000, 4);
 	}
 	
 	public void generateTrainSetMatrices()
@@ -50,7 +50,7 @@ public class TrainingNeuralNetworks {
 		thenn.add(30);
 		thenn.add(25);
 		thenn.add(25);
-		thenn.add(14); 
+		thenn.add(4); 
 		NeuralNetwork nn = new NeuralNetwork(thenn) ; 
 		try {
 			image = ImageIO.read(new File(pathToPic)) ;
@@ -69,7 +69,7 @@ public class TrainingNeuralNetworks {
 		TrainingNeuralNetworks trnn = new TrainingNeuralNetworks() ; 
 		//trnn.generateTrainSetMatrices();
 		trnn.trainNeuralNetWork(); 
-		System.out.println(trnn.predict("/home/nikolis/git/SolveIT/images/0/subImage310.jpg"));
+		//System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\0\\subImage2t9.jpg"));
 		
 	}
 	

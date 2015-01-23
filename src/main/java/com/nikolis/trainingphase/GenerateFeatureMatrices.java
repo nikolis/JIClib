@@ -150,16 +150,16 @@ public class GenerateFeatureMatrices {
 		creatingXandYs("1");
 		creatingXandYs("2");
 		creatingXandYs("3");
-		creatingXandYs("4");
-		creatingXandYs("5");
-		creatingXandYs("6");
-		creatingXandYs("7");
-		creatingXandYs("8");
-		creatingXandYs("9");
-		creatingXandYs("divide");
-		creatingXandYs("multiply");
-		creatingXandYs("pavla");
-		creatingXandYs("plus");
+		//creatingXandYs("4");
+		//creatingXandYs("5");
+		//creatingXandYs("6");
+		//creatingXandYs("7");
+		//creatingXandYs("8");
+		//creatingXandYs("9");
+		//creatingXandYs("divide");
+		//creatingXandYs("multiply");
+		//creatingXandYs("pavla");
+		//creatingXandYs("plus");
 		
 	}
 	
@@ -222,6 +222,8 @@ public class GenerateFeatureMatrices {
 	
 	public static void main(String args[])
 	{
+		GenerateFeatureMatrices genr = new GenerateFeatureMatrices(); 
+		genr.exportTrainingSetMatrices("trainingSet.mat");
 		
 	}
 	

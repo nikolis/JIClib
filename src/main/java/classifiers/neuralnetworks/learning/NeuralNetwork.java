@@ -17,7 +17,7 @@ import org.la4j.matrix.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
 
 import com.nikolis.trainingphase.GenerateFeatureMatrices;
-import com.nikolis.trainingphase.TrainingNeuralNetworks;
+import com.nikolis.trainingphase.MatFileGenerator;
 
 
 
@@ -29,19 +29,11 @@ import com.nikolis.trainingphase.TrainingNeuralNetworks;
  *
  */
 public class NeuralNetwork {
-
-	Matrix Theta1 ; 
-	Matrix Theta2 ; 
+ 
 	Matrix X ; 
 	Matrix Y ;
-	Matrix Theta1_grad ;  
-	Matrix Theta2_grad ; 
 	Matrix hipothesis ; 
-	Matrix alreadyTrainedTheta1 ; 
-	Matrix alreadyTrainedTheta2 ;
-	static final  int numberOfFeatures =30   ; 
-	static final int numberOfLabeles =14; 
-	static final int secondLayerUnits =25 ; 
+
 	Matrix[] allTheAs ; 
 	Matrix[] allTheDs ;
 	Matrix[] alltheds ;
@@ -68,16 +60,6 @@ public class NeuralNetwork {
 	 */
 	public void feedForward(double lambda)
 	{	
-		//Matrix a1 = NeuralHelper.addBias(X);
-		//Matrix z2 = a1.multiply(Theta1.transpose()) ;
-		
-		//Matrix a2 = NeuralHelper.sigmoid(z2);
-		//a2=NeuralHelper.addBias(a2);
-		//Matrix z3 = a2.multiply(Theta2.transpose()) ;
-		//Matrix a3 = NeuralHelper.sigmoid(z3);
-		
-		//
-		
 		allTheAs[0]=X ;
 		
 		
@@ -85,28 +67,11 @@ public class NeuralNetwork {
 		{
 			allTheAs[i]= NeuralHelper.addBias(allTheAs[i-1]) ;
 			allTheZs[i-1]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
-			//allTheAs[i]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
 			allTheAs[i]=NeuralHelper.sigmoid(allTheZs[i-1]) ;
 		}
 		hipothesis=allTheAs[allTheAs.length-1] ;
 		
-		/*System.out.println("The hipothesis 1 : ");
-		System.out.println(allTheAs[allTheAs.length-1]);
-		System.out.println("The hipothesis 2 : ");
-		System.out.println(hipothesis);*/
-		
-		
-		//Matrix delta3 = a3.subtract(Y) ;
-		
-		
-		
-		//Matrix temp = NeuralHelper.combineTwoMatrix(NeuralHelper.createOnesMatrix(z2.rows(), 1),z2);
-		//Matrix delta2 = delta3.multiply(Theta2).hadamardProduct(NeuralHelper.sigmoidGradient(temp)) ;
-		//Matrix delta22 = NeuralHelper.returnAllRowsAndGivenCollumns(delta2, 1);
-		
 		alltheds[alltheds.length-1] = allTheAs[allTheAs.length-1].subtract(Y) ;
-		
-		
 		
 		for(int i=alltheds.length-2; i>=0; i--)
 		{
@@ -117,38 +82,21 @@ public class NeuralNetwork {
 			alltheds[i]=NeuralHelper.returnAllRowsAndGivenCollumns(alltheds[i], 1) ;
 		}
 		
-		//Matrix regularization =NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(Theta1.rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(Theta1, 1)).multiply(lambda/X.rows()) ;
-		//Matrix regularization2 =NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(Theta2.rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(Theta2, 1)).multiply(lambda/X.rows()) ;
-	
-		
-		
 		for(int i=0; i<allTheRegTerms.length; i++)
 		{
 			allTheRegTerms[i] = NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(alltheThetas[i].rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(alltheThetas[i], 1)).multiply(lambda/X.rows()) ;
 		}
 		
-				
-				
-				
 		for(int i=0; i<allTheDs.length; i++)
 		{
 			allTheDs[i] =  alltheds[i].transpose() ;
 			allTheDs[i] = allTheDs[i].multiply(NeuralHelper.addBias(allTheAs[i])) ; 
 		}
 		
-		
-		//Matrix Delta1 = delta22.transpose().multiply(a1) ;
-		//Matrix Delta2 = delta3.transpose().multiply(a2) ; 
-		
-		
 		for(int i=0; i<allTheThetaGreds.length; i++)
 		{
 			allTheThetaGreds[i]=allTheDs[i].divide(X.rows()).add(allTheRegTerms[i]) ;
 		}
-		
-		
-		//Theta1_grad=Delta1.divide(X.rows()).add(regularization) ; 
-		//Theta2_grad=Delta2.divide(X.rows()).add(regularization2);
 		
 	}
 	
@@ -185,9 +133,6 @@ public class NeuralNetwork {
 		{
 			alltheThetas[i]=NeuralHelper.createsRanomsMatrix(this.neuralNetwork.get(i+1), neuralNetwork.get(i)+1) ; 
 		}
-		
-		//Theta1=alltheThetas[0];
-		//Theta2=alltheThetas[1];
 	
 		convertY(numberOfLabels);
 		for(int i=0; i<numOfIterations; i++)
@@ -195,9 +140,6 @@ public class NeuralNetwork {
 			
 			
 			feedForward(lambda);
-			//Theta1= Theta1.subtract(Theta1_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
-			//Theta2= Theta2.subtract(Theta2_grad.multiply(alpha).multiply(computeCost(hipothesis, lambda))) ;
-			
 			for(int j=0; j<alltheThetas.length; j++)
 			{
 				alltheThetas[j] = alltheThetas[j].subtract(allTheThetaGreds[j].multiply(alpha).multiply(computeCost(hipothesis, lambda))) ; 
@@ -207,56 +149,45 @@ public class NeuralNetwork {
 		}
 		try
 		{
-			GenerateFeatureMatrices.exportTheMatricesGeneral(NeuralHelper.matrix2Array(alltheThetas[0]), NeuralHelper.matrix2Array(alltheThetas[1]), "Theta1", "Theta2", "Thetas.mat");
+			MatFileGenerator matfile = new MatFileGenerator("Thetas.mat") ;
+			for(int i=0; i<alltheThetas.length; i++)
+			{
+				matfile.addArray(NeuralHelper.matrix2Array(alltheThetas[i]), "Theta"+i);
+			}
+			matfile.writeFile()  ; 
 		}catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 
 	}
-	
-	
-	/**
-	 * Loads the  Csv files written  from the last workingItOut method execution 
-	 * as the csv is written by the last training process AKA execution of the workingItOut method
-	 * the size of the alreadyTrainedTheta should be the same as the last time the neuralnetwork was trained
-	 * that is why the layers size , numbers of features and number of output units(aka : number of classes)
-	 * are saved as static variables and are being set only every time we train the neural network .  
-	 */
-	public  void loadTrainedThetas()
-	{
-		alreadyTrainedTheta1 = new Basic2DMatrix(NeuralNetwork.secondLayerUnits,NeuralNetwork.numberOfFeatures+1); 
-		alreadyTrainedTheta2 = new Basic2DMatrix(NeuralNetwork.numberOfLabeles,NeuralNetwork.secondLayerUnits+1);
-		try {
-			alreadyTrainedTheta1=NeuralHelper.loadCsvFileInMatrix("Theta1.csv", alreadyTrainedTheta1.rows(), alreadyTrainedTheta1.columns()) ;
-			alreadyTrainedTheta2=NeuralHelper.loadCsvFileInMatrix("Theta2.csv", alreadyTrainedTheta2.rows(), alreadyTrainedTheta2.columns()) ;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		NeuralHelper.printMatrix(alreadyTrainedTheta1);
-		NeuralHelper.printMatrix(alreadyTrainedTheta2);
-	}
-	
+
 	
 	
 	public int  predict(double Xin[][])
 	{
-		Matrix Theta1 = new Basic2DMatrix(GenerateFeatureMatrices.readMatFile("Thetas.mat", "Theta1"));
-		Matrix Theta2 = new Basic2DMatrix(GenerateFeatureMatrices.readMatFile("Thetas.mat", "Theta2"));
-		
 		Matrix X = new Basic2DMatrix(Xin);
-		X =X.transpose() ; 
-		Matrix a1 = NeuralHelper.addBias(X);
-		Matrix z2 = a1.multiply(Theta1.transpose()) ;
-		Matrix a2 = NeuralHelper.sigmoid(z2);
-		a2=NeuralHelper.addBias(a2);
-		Matrix z3 = a2.multiply(Theta2.transpose()) ;
-		Matrix a3 = NeuralHelper.sigmoid(z3);
-		hipothesis=a3 ;
+		X =X.transpose() ;
+		for(int i=0; i<alltheThetas.length; i++)
+		{
+			alltheThetas[i]=new Basic2DMatrix(GenerateFeatureMatrices.readMatFile("Thetas.mat", "Theta"+i)) ;
+		}
+		allTheAs[0]=X ;
+		
+		
+		for(int i=1; i<allTheAs.length; i++)
+		{
+			allTheAs[i]= NeuralHelper.addBias(allTheAs[i-1]) ;
+			allTheZs[i-1]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
+			//allTheAs[i]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
+			allTheAs[i]=NeuralHelper.sigmoid(allTheZs[i-1]) ;
+		}
+		hipothesis=allTheAs[allTheAs.length-1] ;
+		
 		NeuralHelper.printMatrix(hipothesis);
 		double max =-1 ; 
 		int maxPosition =-1 ; 
+		
 		for(int i=0; i<hipothesis.columns(); i++)
 		{
 			if(max<hipothesis.get(0, i))
@@ -294,7 +225,7 @@ public class NeuralNetwork {
 	 * @param lambda
 	 * @return
 	 */
-	double computeRegTerm(double lambda)
+	/*double computeRegTerm(double lambda)
 	{
 		Matrix regTheta1 = new Basic2DMatrix(Theta1.rows(), Theta1.columns()-1);
 		Matrix regTheta2 = new Basic2DMatrix(Theta2.rows(), Theta2.columns()-1);
@@ -318,7 +249,7 @@ public class NeuralNetwork {
 		regTheta2= regTheta2.hadamardProduct(regTheta2);
 		double subRegTerm = regTheta1.sum()+regTheta2.sum(); 
 		return (lambda/(2*X.rows())) * subRegTerm ;
-	}
+	}*/
 	
 	
 	/**
@@ -357,8 +288,6 @@ public class NeuralNetwork {
 		
 		return (temp.sum()/X.rows());//+computeRegTerm(lambda); 
 	}
-	
-	
 	public static void main(String args[])
 	{
 	
