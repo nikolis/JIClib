@@ -137,8 +137,6 @@ public class NeuralNetwork {
 		NeuralHelper.printMatrix(Y);
 		for(int i=0; i<numOfIterations; i++)
 		{
-			
-			
 			feedForward(lambda);
 			for(int j=0; j<alltheThetas.length; j++)
 			{
@@ -162,12 +160,33 @@ public class NeuralNetwork {
 
 	}
 
+	public double[][]  predict2(double Xin[][])
+	{
+		Matrix X = new Basic2DMatrix(Xin);
+		for(int i=0; i<alltheThetas.length; i++)
+		{
+			alltheThetas[i]=new Basic2DMatrix(GenerateFeatureMatrices.readMatFile("Thetas.mat", "Theta"+i)) ;
+		}
+		allTheAs[0]=X ;
+		
+		
+		for(int i=1; i<allTheAs.length; i++)
+		{
+			allTheAs[i]= NeuralHelper.addBias(allTheAs[i-1]) ;
+			allTheZs[i-1]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
+			allTheAs[i]=NeuralHelper.sigmoid(allTheZs[i-1]) ;
+		}
+		hipothesis=allTheAs[allTheAs.length-1] ;
+		
+		return NeuralHelper.matrix2Array(hipothesis) ; 
+	}
 	
 	
 	public int  predict(double Xin[][])
 	{
 		Matrix X = new Basic2DMatrix(Xin);
 		X =X.transpose() ;
+		NeuralHelper.printMatrix(X);
 		for(int i=0; i<alltheThetas.length; i++)
 		{
 			alltheThetas[i]=new Basic2DMatrix(GenerateFeatureMatrices.readMatFile("Thetas.mat", "Theta"+i)) ;
@@ -286,10 +305,6 @@ public class NeuralNetwork {
 		temp= temp.subtract(temp2) ;
 		
 		return (temp.sum()/X.rows());//+computeRegTerm(lambda); 
-	}
-	public static void main(String args[])
-	{
-	
 	}
 	
 }

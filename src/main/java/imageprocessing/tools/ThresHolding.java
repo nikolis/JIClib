@@ -52,9 +52,9 @@ public class ThresHolding {
 		int thresHoldWithMinimymVariance  =9669;  
 		while(enumKey.hasMoreElements()) { 
 		    Integer intensity = enumKey.nextElement();
-			System.out.println("edw intensity : "+ intensity )   ;
+			//System.out.println("edw intensity : "+ intensity )   ;
 		    double variance = thresholds.get(intensity) ; 
-		    System.out.println("edw variance : "+ (long) variance )   ;
+		    //System.out.println("edw variance : "+ (long) variance )   ;
 		    if(minimymVariance == null){
 		    	minimymVariance=variance ; 
 		    	thresHoldWithMinimymVariance = intensity ;

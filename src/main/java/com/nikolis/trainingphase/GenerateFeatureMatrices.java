@@ -19,11 +19,13 @@ import javax.imageio.ImageIO;
 
 
 
+
 import com.jmatio.io.MatFileReader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLDouble;
 
+import featureexctraction.ProjectionHistogram;
 import featureexctraction.ZernikeMoments;
 
 public class GenerateFeatureMatrices {
@@ -32,16 +34,25 @@ public class GenerateFeatureMatrices {
 	private ArrayList<Double> examplesClasses ;
 	private static final int  numberOfMoments =10 ;
 	private Collection<MLArray>  collectionMl ;
+	featureExtractionTechnique technique ; 
 	
-	public GenerateFeatureMatrices()
+	public GenerateFeatureMatrices(featureExtractionTechnique technique)
 	{
+		this.technique=technique;
 		examplesFeatures =new ArrayList<ArrayList<Double>>(); 
 		examplesClasses = new ArrayList<Double>() ;
 		collectionMl = new ArrayList<MLArray>();
 	}
 	
 	
-	private  void exportTheMatrices(ArrayList<Double> examplesClasses, ArrayList<ArrayList<Double>> examplesFeatures,String trainSetFileName)
+	public enum featureExtractionTechnique
+	{
+		ZernikeMoment,ProjectionHistogram
+	}
+	
+	
+	
+	private  void exportTheMatrices(ArrayList<Double> examplesClasses, ArrayList<ArrayList<Double>> examplesFeatures,String trainSetFileName )
 	{
 		addArrayListToMlarray(examplesClasses, "Y");
 		addArrayListToMlarray2(examplesFeatures, "X");
@@ -87,7 +98,6 @@ public class GenerateFeatureMatrices {
 	
 	public static void randomlySuffleArray(double[][] array,double[][] array2)
 	{
-		
 		for(int j=0; j<20; j++)
 		{
 				
@@ -129,6 +139,8 @@ public class GenerateFeatureMatrices {
 		collectionMl.add(mlArray) ;
 	}
 	
+	
+	
 	static double[][] convertArrayListToNormalArray(ArrayList<Double> arrayList)
 	{
 		double[][] normalArray = new double[arrayList.size()][1] ; 
@@ -157,24 +169,36 @@ public class GenerateFeatureMatrices {
 	
 	
 	
-	private void creatingXandYs(String classToTrain)
+	private void creatingXandYs(String classToTrain,String pathToExamplesFile)
 	{	
-		ZernikeMoments zernMom ;
-		File folder = new File("images/"+classToTrain);
+		
+		File folder = new File(pathToExamplesFile+"/"+classToTrain);
 		File[] listOfFiles = folder.listFiles();
+		ArrayList<Double> features = null ;
 		BufferedImage image ; 
 		    for (int i = 0; i < listOfFiles.length; i++) 
 		    {
 		    	System.out.println(classToTrain);
+		    	System.out.println(pathToExamplesFile);
 		      if (listOfFiles[i].isFile()) 
 		      {
 		        try {
 					image = ImageIO.read(listOfFiles[i]) ;
 					image = ColorToGray.toGrayLM(image) ; 
 					image = ThresHolding.grayImage2Bin(image) ;
-					zernMom = new ZernikeMoments(image);
-					ArrayList<Double> moments = zernMom.mainProcces(numberOfMoments, 1);
-					examplesFeatures.add(moments);
+					switch (technique) {
+						case  ZernikeMoment : 
+							ZernikeMoments zernikeMoments = new ZernikeMoments(image) ;
+							features = zernikeMoments.mainProcces(numberOfMoments, 1);
+							break ;
+						case ProjectionHistogram :
+							features = ProjectionHistogram.findHistogram(image, ProjectionHistogram.typeOfProjection.HorizontalAndVertical) ;
+							break ; 
+						default:
+							features = ProjectionHistogram.findHistogram(image, ProjectionHistogram.typeOfProjection.HorizontalAndVertical) ;
+							break;
+					}
+					examplesFeatures.add(features);
 					examplesClasses.add((double)getclassNumber(classToTrain));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -184,12 +208,12 @@ public class GenerateFeatureMatrices {
 	}
 	
 	
-	private void createExampleFeatureAndClassesArrays()
+	private void createExampleFeatureAndClassesArraysZernike(String filePathToExamples)
 	{
-		creatingXandYs("0");
-		creatingXandYs("1");
-		//creatingXandYs("2");
-		//creatingXandYs("3");
+		creatingXandYs("0",filePathToExamples);
+		creatingXandYs("1",filePathToExamples);
+		creatingXandYs("2",filePathToExamples);
+		creatingXandYs("3",filePathToExamples);
 		//creatingXandYs("4");
 		//creatingXandYs("5");
 		//creatingXandYs("6");
@@ -202,6 +226,8 @@ public class GenerateFeatureMatrices {
 		//creatingXandYs("plus");
 		
 	}
+	
+	
 	
 	private int getclassNumber(String classToTrain)
 	{
@@ -254,19 +280,11 @@ public class GenerateFeatureMatrices {
 		return array ; 
 	}
 	
-	public void exportTrainingSetMatrices(String name)
+	public void exportTrainingSetMatrices(String name,String filePathToExamples)
 	{
-		createExampleFeatureAndClassesArrays() ;
+		createExampleFeatureAndClassesArraysZernike(filePathToExamples) ;
 		exportTheMatrices(examplesClasses, examplesFeatures, name);
 	}
-	
-	public static void main(String args[])
-	{
-		GenerateFeatureMatrices genr = new GenerateFeatureMatrices(); 
-		genr.exportTrainingSetMatrices("trainingSet.mat");
-		
-	}
-	
 	
 	
 }

@@ -352,10 +352,6 @@ public class Labeling {
 		int left = findLeftMostForClass(klass) ; 
 		int top = findTopMostForClass(klass); 
 		int bot = findBotMostForClass(klass); 
-		System.out.println(right);
-		System.out.println(left);
-		System.out.println(top);
-		System.out.println(bot);
 		BufferedImage subImage = new  BufferedImage(right-left, bot-top, originalImage.getType()) ;
 		for(int i=left; i<right; i++)
 		{
