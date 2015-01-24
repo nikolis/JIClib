@@ -35,7 +35,6 @@ public class Labeling {
 	public Labeling(BufferedImage originalImage)
 	{
 		searchingStack = new Stack<>() ; 
-		//returnImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType()) ; 
 		this.originalImage = originalImage ; 
 		classes = new int[originalImage.getWidth()][originalImage.getHeight()] ;//TODO check compatibility with image iteration 
 		pixelsGiven = new ArrayList<>() ;
@@ -388,7 +387,7 @@ public class Labeling {
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
 		BufferedImage image12=null;
-		String filetoread = "images/output.jpg" ;
+		String filetoread = "images/tests/images5.jpg" ;
 		try{
 			image = ImageIO.read(new File(filetoread));
 			image12 = ThresHolding.grayImage2Bin(image) ;

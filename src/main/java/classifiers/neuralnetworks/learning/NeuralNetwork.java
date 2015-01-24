@@ -76,7 +76,6 @@ public class NeuralNetwork {
 		for(int i=alltheds.length-2; i>=0; i--)
 		{
 			Matrix temperor = NeuralHelper.combineTwoMatrix(NeuralHelper.createOnesMatrix(allTheZs[i].rows(), 1),allTheZs[i]) ;
-			//System.out.println(i);
 			Matrix temp2 = alltheds[i+1].multiply(alltheThetas[i+1]) ;
 			alltheds[i]= temp2.hadamardProduct(NeuralHelper.sigmoidGradient(temperor)) ; 
 			alltheds[i]=NeuralHelper.returnAllRowsAndGivenCollumns(alltheds[i], 1) ;
@@ -126,7 +125,7 @@ public class NeuralNetwork {
 	 * @param lambda
 	 * @param numOfIterations
 	 */
-	public void batchGradientDescemt(int secondLayerUnits,double alpha,double lambda,int numOfIterations,int numberOfLabels)
+	public void batchGradientDescemt(double alpha,double lambda,int numOfIterations,int numberOfLabels)
 	{
 		//TODO CREATE RANDOM TO RPEVENT SYMETRY 
 		for(int i=0; i<alltheThetas.length; i++)
@@ -135,6 +134,7 @@ public class NeuralNetwork {
 		}
 	
 		convertY(numberOfLabels);
+		NeuralHelper.printMatrix(Y);
 		for(int i=0; i<numOfIterations; i++)
 		{
 			
@@ -179,7 +179,6 @@ public class NeuralNetwork {
 		{
 			allTheAs[i]= NeuralHelper.addBias(allTheAs[i-1]) ;
 			allTheZs[i-1]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
-			//allTheAs[i]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
 			allTheAs[i]=NeuralHelper.sigmoid(allTheZs[i-1]) ;
 		}
 		hipothesis=allTheAs[allTheAs.length-1] ;

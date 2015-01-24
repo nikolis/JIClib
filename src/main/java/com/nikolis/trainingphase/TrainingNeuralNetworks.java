@@ -28,17 +28,17 @@ public class TrainingNeuralNetworks {
 		thenn.add(30);
 		thenn.add(25);
 		thenn.add(25);
-		thenn.add(4); 
+		thenn.add(2); 
 		NeuralNetwork nn = new NeuralNetwork(thenn) ; 
 		nn.loadParameters(X, Y);
 		
-		nn.batchGradientDescemt(25, 0.001, 1, 50000, 4);
+		nn.batchGradientDescemt(0.001, 0, 5000, 2);
 	}
 	
 	public void generateTrainSetMatrices()
 	{
 		GenerateFeatureMatrices genfet = new GenerateFeatureMatrices() ; 
-		genfet.exportTrainingSetMatrices("trainingset.mat") ; 
+		genfet.exportTrainingSetMatrices("trainingSet.mat") ; 
 	}
 	
 	public int  predict(String pathToPic)
@@ -50,7 +50,7 @@ public class TrainingNeuralNetworks {
 		thenn.add(30);
 		thenn.add(25);
 		thenn.add(25);
-		thenn.add(4); 
+		thenn.add(2); 
 		NeuralNetwork nn = new NeuralNetwork(thenn) ; 
 		try {
 			image = ImageIO.read(new File(pathToPic)) ;
@@ -69,8 +69,30 @@ public class TrainingNeuralNetworks {
 		TrainingNeuralNetworks trnn = new TrainingNeuralNetworks() ; 
 		//trnn.generateTrainSetMatrices();
 		trnn.trainNeuralNetWork(); 
-		//System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\0\\subImage2t9.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\01.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\02.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\03.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\04.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\05.jpg"));
 		
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\11.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\12.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\13.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\14.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\15.jpg"));
+
+		/*
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\21.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\22.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\23.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\24.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\25.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\31.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\32.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\33.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\34.jpg"));
+		System.out.println(trnn.predict("C:\\Users\\310176547\\Documents\\workspace-sts-3.6.2.RELEASE\\SolveIT\\images\\tesset\\35.jpg"));
+		*/
 	}
 	
 }

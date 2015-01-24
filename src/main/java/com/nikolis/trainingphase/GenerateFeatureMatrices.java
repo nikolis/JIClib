@@ -1,18 +1,23 @@
 package com.nikolis.trainingphase;
 
+import imageprocessing.tools.ColorToGray;
+import imageprocessing.tools.ThresHolding;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.rmi.server.ExportException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
 
 
 
-import org.la4j.matrix.Matrix;
+
+
+
 
 import com.jmatio.io.MatFileReader;
 import com.jmatio.io.MatFileWriter;
@@ -51,10 +56,10 @@ public class GenerateFeatureMatrices {
 	public static void exportTheMatricesGeneral(double[][] array1 , double[][] array2,String nameArray1, String nameArray2, String nameFile)
 	{
 		Collection<MLArray>  collectionMl = new ArrayList<MLArray>();
+		randomlySuffleArray(array1,array2);
 		
 		MLArray mlArray1 = new MLDouble(nameArray1,array1) ;
 		MLArray mlArray2 = new MLDouble(nameArray2,array2) ;
-		
 		
 		collectionMl.add(mlArray1) ;
 		collectionMl.add(mlArray2) ;
@@ -65,6 +70,39 @@ public class GenerateFeatureMatrices {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
+	}
+	
+	public static int randInt(int min, int max) {
+
+	    // NOTE: Usually this should be a field rather than a method
+	    // variable so that it is not re-seeded every call.
+	    Random rand = new Random();
+
+	    // nextInt is normally exclusive of the top value,
+	    // so add 1 to make it inclusive
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+	    return randomNum;
+	}
+	
+	public static void randomlySuffleArray(double[][] array,double[][] array2)
+	{
+		
+		for(int j=0; j<20; j++)
+		{
+				
+			for(int i=0; i>array.length; i++)
+			{
+				double[] temp = array[i];
+				double[] temp2=array[i];
+				int random = randInt(0, array.length-1);
+				array[i]=array[random] ;
+				array[random]=temp ;
+				array2[i]=array[random] ;
+				array[random]=temp2 ; 
+			}
+		
+		}
 	}
 	
 	
@@ -132,6 +170,8 @@ public class GenerateFeatureMatrices {
 		      {
 		        try {
 					image = ImageIO.read(listOfFiles[i]) ;
+					image = ColorToGray.toGrayLM(image) ; 
+					image = ThresHolding.grayImage2Bin(image) ;
 					zernMom = new ZernikeMoments(image);
 					ArrayList<Double> moments = zernMom.mainProcces(numberOfMoments, 1);
 					examplesFeatures.add(moments);
@@ -148,8 +188,8 @@ public class GenerateFeatureMatrices {
 	{
 		creatingXandYs("0");
 		creatingXandYs("1");
-		creatingXandYs("2");
-		creatingXandYs("3");
+		//creatingXandYs("2");
+		//creatingXandYs("3");
 		//creatingXandYs("4");
 		//creatingXandYs("5");
 		//creatingXandYs("6");
