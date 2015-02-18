@@ -102,7 +102,6 @@ public class ProjectionHistogram {
 			out = new PrintStream(new FileOutputStream("output.txt"));
 			System.setOut(out);
 		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		

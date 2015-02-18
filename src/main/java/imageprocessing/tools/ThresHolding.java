@@ -26,7 +26,6 @@ public class ThresHolding {
 				
 				int optimalThresHoldValue = findBestThreshold(thresholds) ; 
 				
-				
 				for(int i = 0 ; i<grayImage.getWidth(); i++){
 					for(int j=0 ; j<grayImage.getHeight(); j++){
 						int red = new Color(grayImage.getRGB(i, j)).getRed()  ;

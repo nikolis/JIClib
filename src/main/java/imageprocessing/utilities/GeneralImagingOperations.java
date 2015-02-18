@@ -32,4 +32,8 @@ public class GeneralImagingOperations {
         return newPixel;
     }
 	
+	public static void main(String[] args)
+	{
+		System.out.println((int) 8<<3);
+	}
 }

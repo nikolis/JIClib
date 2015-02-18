@@ -14,7 +14,7 @@ public class ColorToGray {
 
 	/**
 	 * Classical method turning a colored image in a grayscale image 
-	 * using the average method
+	 * using the Average method
 	 * downside:The pour representation of luminosity 
 	 * @param originalImage
 	 * @return
@@ -43,7 +43,13 @@ public class ColorToGray {
 		}
 		return grayImage ; 
 	}
-	
+	/**
+	 * luminance method plays off the fact that cone density in 
+	 * the human eye is not uniform across colors.Humans perceive green more strongly than red, 
+	 * and red more strongly than blue.
+	 * @param originalImage
+	 * @return
+	 */
 	public static BufferedImage toGrayLM(BufferedImage originalImage){
 		int alpha,red,green,blue ; 
 		int newPixel ;
@@ -56,9 +62,9 @@ public class ColorToGray {
 				red = new Color(originalImage.getRGB(i, j)).getRed() ;
 				green = new Color(originalImage.getRGB(i, j)).getGreen() ; 
 				blue = new Color(originalImage.getRGB(i, j)).getBlue() ;
-				weightedMean = (int)((red*0.299)+ (green*0.587) + (0.114*blue)) ; 
-				newPixel = GeneralImagingOperations.colorToRGB(alpha, weightedMean, weightedMean, weightedMean) ; 
-				greyImage.setRGB(i, j, newPixel);		
+				weightedMean = (int)((red*0.299)+ (green*0.587) + (0.114*blue)) ;
+				Color newColor = new Color(weightedMean, weightedMean, weightedMean) ; 
+				greyImage.setRGB(i, j, newColor.getRGB());		
 			}
 		}
 		return greyImage  ;
@@ -71,13 +77,13 @@ public class ColorToGray {
 		BufferedImage image = null ;
 		BufferedImage endImage ; 
 		try{
-			image = ImageIO.read(new File("images/download.jpg"));
+			image = ImageIO.read(new File("imagestest/download.jpg"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		endImage = ColorToGray.toGrayLM(image) ; 
+		endImage = ColorToGray.toGrayAvg(image) ; 
 		try{
-			ImageIO.write(endImage,"jpg", new File("neww3.jpg")) ;
+			ImageIO.write(endImage,"jpg", new File("imagestest/grayAVG.jpg")) ;
 		}catch(Exception e){
 			e.printStackTrace(); 
 		}
