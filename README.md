@@ -38,4 +38,9 @@ Original Image:
   
   Original Image:
 
+![](https://github.com/nikolis/SolveIT/blob/master/imagestest/gray.jpg)
 
+  Binarized Image:
+  
+  ![](https://github.com/nikolis/SolveIT/blob/master/imagestest/gray.jpg)
+ 
