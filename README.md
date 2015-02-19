@@ -33,3 +33,9 @@ Original Image:
   Grau Image Using luminance method:
 ![](https://github.com/nikolis/SolveIT/blob/master/imagestest/gray.jpg)
 
+- Image binarization:
+  Image is binaryzed using the otsu's thresholding method and it assumes a gray scale Image as Input
+  
+  Original Image:
+
+
