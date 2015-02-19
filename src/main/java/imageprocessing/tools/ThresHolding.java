@@ -150,13 +150,13 @@ public class ThresHolding {
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
 		try{
-			image = ImageIO.read(new File("images/input.jpg"));
+			image = ImageIO.read(new File("imagestest/gray.jpg"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		image2 = ThresHolding.grayImage2Bin(image) ; 
 		try{
-			ImageIO.write(image2,"jpg", new File("images/output.jpg")) ;
+			ImageIO.write(image2,"jpg", new File("imagestest/binarizedImage.jpg")) ;
 		}catch(Exception e){
 			e.printStackTrace(); 
 		}
