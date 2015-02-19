@@ -42,5 +42,5 @@ Original Image:
 
   Binarized Image:
   
-  ![](https://github.com/nikolis/SolveIT/blob/master/imagestest/gray.jpg)
+  ![](https://github.com/nikolis/SolveIT/blob/master/imagestest/binarizedImage.jpg)
  
