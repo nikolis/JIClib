@@ -24,14 +24,14 @@ The pre proccessing has the following functionality:
 
 Original Image:
 
-![](https://github.com/nikolis/SolveIT/blob/master/imagestest/download.jpg)
+
 
   Gray Image Using Averaging method:
 
-![](https://github.com/nikolis/SolveIT/blob/master/imagestest/grayAVG.jpg)
+
 
   Grau Image Using luminance method:
-![](https://github.com/nikolis/SolveIT/blob/master/imagestest/gray.jpg)
+
 
 - Image binarization:
   Image is binaryzed using the otsu's thresholding method and it assumes a gray scale Image as Input
