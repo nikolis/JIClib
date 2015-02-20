@@ -38,6 +38,6 @@ Original Image:
   
 - Linear Filters 
   
- In our scope the foreground of an image is our base information which we are going to use to classify the digits and so even minor changes in the image could yield better recognition rate at the end. We are using Linear Filters to Reduce the amount of noise present in the picture and this is what we get as an output:
+ In our scope the foreground of an image is our base information, which we are going to use to classify the digits present on the image and so even minor changes in the image could yield better recognition rate at the end. We are using Linear Filters to Reduce the amount of noise present in the picture and this is what we get as an output:
 
 ![](https://github.com/nikolis/SolveIT/blob/master/imagestest/binarizedImageFiltered.jpg)
