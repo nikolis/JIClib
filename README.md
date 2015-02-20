@@ -60,3 +60,6 @@ component3:
 component4:
 
 ![](https://github.com/nikolis/SolveIT/blob/master/imagestest/subImage5ed.jpg)
+
+
+### Feature Extraction 
