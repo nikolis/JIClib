@@ -141,16 +141,12 @@ public class ThresHolding {
 	
 	
 	
-	
-	
-	
-	
 	public static void main(String args[]){
 		//ThresHolding nik = new ThresHolding() ;
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
 		try{
-			image = ImageIO.read(new File("imagestest/gray.jpg"));
+			image = ImageIO.read(new File("imagestest/grayAVG.jpg"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}

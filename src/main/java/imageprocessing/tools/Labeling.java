@@ -235,7 +235,7 @@ public class Labeling {
 		}
 		returnImage = imageScaling(returnImage, klass) ; 
 		try {
-			ImageIO.write(returnImage,"jpg", new File("images/subImage"+klass+tade+".jpg")) ;
+			ImageIO.write(returnImage,"jpg", new File("imagestest/subImage"+klass+tade+".jpg")) ;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -361,7 +361,7 @@ public class Labeling {
 			}
 		}
 		try{
-			ImageIO.write(subImage,"jpg", new File("images/subImage"+klass+tade+".jpg")) ;
+			ImageIO.write(subImage,"jpg", new File("imagestest/subImage"+klass+tade+".jpg")) ;
 		}catch(Exception e){
 			e.printStackTrace(); 
 		}
@@ -383,7 +383,7 @@ public class Labeling {
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
 		BufferedImage image12=null;
-		String filetoread = "images/tests/images5.jpg" ;
+		String filetoread = "imagestest/binarizedImageFiltered.jpg" ;
 		try{
 			image = ImageIO.read(new File(filetoread));
 			image12 = ThresHolding.grayImage2Bin(image) ;
@@ -401,7 +401,7 @@ public class Labeling {
 		
 		try
 		{
-			ImageIO.write(labeling.returnImage,"jpg", new File("images/nsf23.jpg")) ;
+			ImageIO.write(labeling.returnImage,"jpg", new File("imagestest/output.jpg")) ;
 		}catch(Exception e){
 			e.printStackTrace(); 
 		}

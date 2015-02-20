@@ -77,7 +77,7 @@ public class ColorToGray {
 		BufferedImage image = null ;
 		BufferedImage endImage ; 
 		try{
-			image = ImageIO.read(new File("imagestest/download.jpg"));
+			image = ImageIO.read(new File("imagestest/original.jpg"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}

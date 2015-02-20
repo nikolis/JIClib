@@ -1,6 +1,10 @@
-package imageprocessing.tools;
+package imageprocessing.tools ; 
+
+
+import imageprocessing.utilities.GeneralImagingOperations;
 
 import java.awt.Color;
+import java.awt.PageAttributes.OriginType;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -8,145 +12,122 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 
-import imageprocessing.utilities.*;
-
-
 public class LineraFileters {
-	BufferedImage originalImage  ; 
-	BufferedImage newImage  ; 
-	
 	//This is the representation of The kernels to be used
 	//The 1 denotes a digits that will be take in account the 2 is the target
 	//Digit and the 0 is the digits that we won't care for 
-	public static int[]  linearFilterKernel1 = {1, 1, 1, 1, 2, 1, 0, 0, 0} ;
-	public static int[]  linearFilterKernel2 = {0, 1, 1, 0, 2, 1, 0, 1, 1};
-	public static int[]  linearFilterKernel3 = {1, 1, 1, 1, 2, 1, 0, 0, 0} ;
-	public static int[]  linearFilterKernel4 = {1, 1, 1, 1, 2, 1, 0, 0, 0} ;
+	public static int[][]  linearFilterKernel1 = {{1, 1, 1}, {1, 2, 1}, {0, 0, 0}} ;
+	public static int[][]  linearFilterKernel2 = {{0, 1, 1}, {0, 2, 1}, {0, 1, 1}};
+	public static int[][]  linearFilterKernel3 = {{1, 1, 1}, {1, 2, 1}, {0, 0, 0}} ;
+	public static int[][]  linearFilterKernel4 = {{1, 1, 1}, {1, 2, 1}, {0, 0, 0}} ;
 	
 	
-	
-	public LineraFileters(BufferedImage originalImage)
-	{
-		this.originalImage = originalImage ; 
-		this.newImage=originalImage ; 
-	}
-	
-	
-	public BufferedImage applyLinearFilters(int[] currentFilter)
-	{
-		int variableOfScale = 3 ; 
-		int[] areaOfInterest = new int[variableOfScale*variableOfScale] ;
-		int counter=0 ; 
-		int targetPixelH =0 ; 
-		int targetPixelW=0 ; 
+	public static BufferedImage generalLinerFiltering (BufferedImage originalImage ,int[][] kernel){
 		
-		
-		//TODO more dinamic imageHeight and width should
-		//be increased according to the size of the kernel being appalyed
-		for(int imageHeight=2, startH=0; imageHeight<originalImage.getHeight(); imageHeight+=variableOfScale,startH+=variableOfScale)
+		BufferedImage newImage = originalImage ;           
+		for(int j=0 ; j<originalImage.getHeight() ; j++)
 		{
-			for(int imageWidth=2, startW=0; imageWidth<originalImage.getWidth(); imageWidth+=variableOfScale,startW+=variableOfScale)
-			{	//System.out.println("--------------------------------------------------->");
-				//System.out.println("region is width from: "+ startW +" until : "+ imageWidth);
-				//System.out.println("region is height from: "+ startH+ " ubtil : "+ imageHeight);
-				
-				
-				for(int inRegionHeight=startH; inRegionHeight<=imageHeight; inRegionHeight++){
-					for(int inRegionWidth=startW; inRegionWidth<=imageWidth; inRegionWidth++){
-						areaOfInterest[counter++]=new Color(originalImage.getRGB(imageWidth, imageHeight)).getRed()  ;
-						//System.out.println("The position Of The Number currently taken is width : "+ inRegionWidth +"and the heights is : "+ inRegionHeight );
-						//System.out.println("counter is : "+ counter); 
-						
-						if(counter==findTarget(currentFilter)){
-							targetPixelH=inRegionHeight ; 
-							targetPixelW=inRegionWidth ; 
-							//System.out.println("And the target Pixel is in width : "+targetPixelW +"  and in the height : "+targetPixelH);
+			for(int i=0 ; i<originalImage.getWidth() ; i++)
+			{
+				if(conditionsToApplyFilter(originalImage, j, i, kernel))
+				{
+					ArrayList<Integer> mustBeEqual = new ArrayList<>() ; 
+					int targetHeight=0 ; 
+					int targetWidth =0;
+					int areaOfInterest[][] = findAreaOfInterest(originalImage , 3, 3, j, i) ; 
+					
+					for(int i2=0 ; i2<kernel.length; i2++)
+					{
+						for(int j2=0 ; j2<kernel[0].length; j2++)
+						{
+							switch (kernel[i2][j2]) {
+							case 0:
+								break;
+							case 1: 
+								mustBeEqual.add(areaOfInterest[i2][j2]) ;
+								break ; 
+							case 2:
+								targetHeight=i2 ; 
+								targetWidth= j2 ;
+								break ; 
+							default:
+								break;
+							}//switch case
+						}
+					}	
+					boolean areEqual  = true ;
+					int value = mustBeEqual.get(0) ;
+					for(int number : mustBeEqual){
+						if(number!=value){
+							areEqual=false ; 
 						}
 					}
-				}
-				int pixelValue = findPixelValu(currentFilter, areaOfInterest);
-				if(pixelValue!=-1){
-					int alpha = new Color(originalImage.getRGB(targetPixelW, targetPixelH)).getAlpha()  ;
-					int newPixel ; 
-					newPixel= GeneralImagingOperations.colorToRGB(alpha, pixelValue, pixelValue, pixelValue) ; 
-					newImage.setRGB(targetPixelW, targetPixelH, newPixel);
-				}
-				targetPixelW=0 ; 
-				targetPixelH =0 ;
-				counter =0 ; 
-				
-				//areaOfInterest[counter]= new Color(originalImage.getRGB(imageWidth, imageHeight)).getRed()  ;
-				//int alpha = new Color(grayImage.getRGB(i, j)).getAlpha()  ;
+					if(areEqual){
+						int newPixel= GeneralImagingOperations.colorToRGB(new Color(newImage.getRGB(i+targetWidth, j+targetHeight)).getAlpha() , value, value, value) ;
+						newImage.setRGB(i+targetWidth, j+targetHeight, newPixel);
+					}
+				}//condition
 			}
 		}
-		return newImage ;
+		return newImage ; 
 	}
-	
-	public static int findTarget(int[] theKernel)
+			
+	public static int[][] findAreaOfInterest(BufferedImage image, int kernelLength , int kernelHeight, int currentHeight, int currentWidth)
 	{
-		int sizeOfKernel = theKernel.length ; 
-		int position = 0 ; 
-		for(int i=0; i<sizeOfKernel; i++){
-			if(theKernel[i]==2){
-				position= i ; 
+		int[][] areaOfInterest = new int[kernelHeight][kernelLength] ; 
+		for(int i=0; i< areaOfInterest.length; i++){
+			for(int j=0; j<areaOfInterest[0].length; j++){
+				areaOfInterest[i][j]= new Color(image.getRGB(i+currentWidth, j+currentHeight)).getRed()  ;
 			}
 		}
-		return position ; 
+		for(int number[] : areaOfInterest){
+			for(int number2: number){
+				//System.out.println(number2);
+			}
+		}
+		//System.out.println("----------------------------------------------->"); 
+		return areaOfInterest ; 
 	}
 	
 	
-	public static int findPixelValu(int[] kernel, int[] regionOfInterest){
-		boolean mustChange = true    ; 
-		int firstDigiValue  ; 
-		ArrayList<Integer> mustBeEqual = new ArrayList<>() ;
-		for(int i=0 ;i<kernel.length; i++){
-			if(kernel[i]==1){
-				mustBeEqual.add(regionOfInterest[i]) ;
-			}
-		}
-		firstDigiValue= mustBeEqual.get(0) ; 
-		for(int number: mustBeEqual){
-			//System.out.println("Digits that must be equal are : "+ number); 
-			if(firstDigiValue!=number){
-				mustChange=false  ; 
-			} 
-		}
-
-		//System.out.println("Does this have to change : "+ mustChange ); 
-		//System.out.println("and the value would be  : "+ firstDigiValue );
-		if(mustChange){
-			return firstDigiValue  ; 
+	public static boolean conditionsToApplyFilter(BufferedImage image, int currentHeight, int currentWidth, int[][] kernel)
+	{
+		boolean conditions ; 
+		int kernelHeight = kernel.length ;
+		int kernelWidth = kernel[0].length ;
+		
+		if(currentHeight + kernelHeight - 1 <image.getHeight() && currentWidth+kernelWidth-1 <image.getWidth()){
+			conditions = true  ;
 		}else{
-			return -1 ;
+			conditions = false  ;  
 		}
+		return conditions ; 
 	}
-	
-	
-	
-	
-	
-	
+		
 	
 	public static void main(String args[])
 	{
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
 		try{
-			image = ImageIO.read(new File("images/nasdf43.jpg"));
-			image = ThresHolding.grayImage2Bin(image);
+			image = ImageIO.read(new File("imagestest/binarizedImage.jpg"));
+			image = imageprocessing.tools.ThresHolding.grayImage2Bin(image);
+			image2=image ; 
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		LineraFileters linearFilter = new LineraFileters(image) ; 
-		for(int i=0 ; i<40 ; i++)
+		for(int i=0; i<10; i++)
 		{
-			image2 = linearFilter.applyLinearFilters(linearFilterKernel1) ; 
-			image2 = linearFilter.applyLinearFilters(linearFilterKernel2) ;
-			image2 = linearFilter.applyLinearFilters(linearFilterKernel3) ;
-			image2 = linearFilter.applyLinearFilters(linearFilterKernel4) ;
+			image2 = LineraFileters.generalLinerFiltering(image2, linearFilterKernel1) ; 
+			image2 = LineraFileters.generalLinerFiltering(image2, linearFilterKernel2) ; 
+			image2 = LineraFileters.generalLinerFiltering(image2, linearFilterKernel3) ; 
+			image2 = LineraFileters.generalLinerFiltering(image2, linearFilterKernel4) ;
+			
 		}
+			
 		try{
-			ImageIO.write(image2,"jpg", new File("images/lalaba.jpg")) ;
+			image2 = imageprocessing.tools.ThresHolding.grayImage2Bin(image) ; 
+			ImageIO.write(image2,"jpg", new File("imagestest/binarizedImageFiltered.jpg")) ;
 		}catch(Exception e){
 			e.printStackTrace(); 
 		}
