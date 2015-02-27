@@ -8,13 +8,6 @@ import classifiers.neuralnetworks.utilities.*;
 import org.la4j.matrix.dense.Basic2DMatrix;
 import org.la4j.Matrix;
 
-
-
-
-
-
-
-import com.nikolis.trainingphase.GenerateFeatureMatrices;
 import com.nikolis.trainingphase.MatFileGenerator;
 import com.solveit.classifier.NeuralNetwork;
 
@@ -159,7 +152,7 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 			alltheThetas[i]=NeuralHelper.createsRanomsMatrix(this.neuralNetworkArchitectures.get(i+1), neuralNetworkArchitectures.get(i)+1) ; 
 		}
 	
-		convertClasseMatrix(numberOfClasses);
+		this.classeMatrix = NeuralHelper.convertClasseMatrix(numberOfClasses, classeMatrix);
 		NeuralHelper.printMatrix(classeMatrix);
 		for(int i=0; i<numOfIterations; i++)
 		{
@@ -181,21 +174,7 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 		
 
 	
-	/**
-	 * The classes Matrix Contains number indicating the number 
-	 * of the class that the corresponding row of FeatureMatrix represents.
-	 * @param numberOfClasses
-	 */
-	private void convertClasseMatrix(final int numberOfClasses)
-	{
-		final Matrix realclasseMatrix = new Basic2DMatrix(classeMatrix.rows(),numberOfClasses) ;
-		for(int i=0; i<classeMatrix.rows(); i++)
-		{	
-			final int num=(int)classeMatrix.get(i, 0) ;	
-			realclasseMatrix.set(i, num, 1);
-		}
-		classeMatrix=realclasseMatrix ; 
-	}
+	
 	
 	/**
 	 * This is method is used to compute the regularisation
@@ -269,42 +248,37 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 		Matrix[] alltheThetas= new Matrix[theNeurons.size()-1] ;
 		Matrix[] allTheAs = new Matrix[theNeurons.size()] ; 
 		Matrix[] allTheZs = new Matrix[theNeurons.size()-1];
-		Matrix hipothesis ; 
 		
 		Matrix X = new Basic2DMatrix(Xin);
+		allTheAs[0]=X ;
+		
 		for(int i=0; i<alltheThetas.length; i++)
 		{
-			alltheThetas[i]=new Basic2DMatrix(GenerateFeatureMatrices.readMatFile("Thetas.mat", "Theta"+i)) ;
+			alltheThetas[i]=new Basic2DMatrix(MatFileGenerator.readMatFile("Thetas.mat", "Theta"+i)) ;
 		}
-		allTheAs[0]=X ;
+		
 		for(int i=1; i<allTheAs.length; i++)
 		{
 			allTheAs[i]= NeuralHelper.addBias(allTheAs[i-1]) ;
 			allTheZs[i-1]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
 			allTheAs[i]=NeuralHelper.sigmoid(allTheZs[i-1]) ;
 		}
-		hipothesis=allTheAs[allTheAs.length-1] ;
-		return NeuralHelper.matrix2Array(hipothesis) ; 
+		
+		return NeuralHelper.matrix2Array(allTheAs[allTheAs.length-1]) ; 
 	}
 	
 	public double[][]  predict(double Xin[][])
 	{	
-		Matrix hipothesis ; 
-		
 		Matrix X = new Basic2DMatrix(Xin);
-		for(int i=0; i<alltheThetas.length; i++)
-		{
-			alltheThetas[i]=new Basic2DMatrix(GenerateFeatureMatrices.readMatFile("Thetas.mat", "Theta"+i)) ;
-		}
 		allTheAs[0]=X ;
+	
 		for(int i=1; i<allTheAs.length; i++)
 		{
 			allTheAs[i]= NeuralHelper.addBias(allTheAs[i-1]) ;
 			allTheZs[i-1]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
 			allTheAs[i]=NeuralHelper.sigmoid(allTheZs[i-1]) ;
 		}
-		hipothesis=allTheAs[allTheAs.length-1] ;
-		return NeuralHelper.matrix2Array(hipothesis) ; 
+		return NeuralHelper.matrix2Array(allTheAs[allTheAs.length-1]) ; 
 	}
 	
 }

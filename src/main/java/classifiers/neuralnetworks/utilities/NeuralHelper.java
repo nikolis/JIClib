@@ -31,6 +31,22 @@ public class NeuralHelper{
 	    return matrix ; 
 	}
 	
+	/**
+	 * The classes Matrix Contains number indicating the number 
+	 * of the class that the corresponding row of FeatureMatrix represents.
+	 * @param numberOfClasses
+	 */
+	public static Matrix convertClasseMatrix(final int numberOfClasses, Matrix mat )
+	{
+		final Matrix realclasseMatrix = new Basic2DMatrix(mat.rows(),numberOfClasses) ;
+		for(int i=0; i<mat.rows(); i++)
+		{	
+			final int num=(int)mat.get(i, 0) ;	
+			realclasseMatrix.set(i, num, 1);
+		}
+		return realclasseMatrix ; 
+	}
+	
 	
 	public static double[][]  matrix2Array(Matrix matrix)
 	{

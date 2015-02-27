@@ -48,8 +48,7 @@ public class ZernikeMoments
 	
 	public ArrayList<Double> mainProcces(final int order,final int lambdaChoise)
 	{
-		double lambda ,ZMpq; 
-		int moments =0; 
+		double lambda ,ZMpq;  
 		Complex v = new Complex()  ;  
 		
 		normalization(1);
@@ -68,7 +67,6 @@ public class ZernikeMoments
 				
 				if(!((p-Math.abs(q))%2==0)&&(-p<=q)&&(q<=p))
 				{
-					moments++;
 					for(int i=0; i<insideDisc.length; i++)
 					{		
 						r      = Math.sqrt(Math.pow(insideDisc.X[i],2)+Math.pow(insideDisc.Y[i],2));

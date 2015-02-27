@@ -17,9 +17,8 @@ public class TrainingNeuralNetworks {
 	
 	public void trainNeuralNetWork()
 	{
-		final  double X[][] =GenerateFeatureMatrices.readMatFile("trainingSet.mat", "X");
-		final  double Y[][] =GenerateFeatureMatrices.readMatFile("trainingSet.mat", "Y");
-		
+		final  double X[][] =MatFileGenerator.readMatFile("trainingSet.mat", "X");
+		final  double Y[][] =MatFileGenerator.readMatFile("trainingSet.mat", "Y");
 		ArrayList<Integer> thenn =  new ArrayList<Integer>() ;
 	
 		thenn.add(X[0].length);
@@ -42,7 +41,7 @@ public class TrainingNeuralNetworks {
 	
 	public void calculateTestSetAccuraccy()
 	{
-		double Xtemp[][] =GenerateFeatureMatrices.readMatFile("testSet.mat", "X");
+		double Xtemp[][] =MatFileGenerator.readMatFile("testSet.mat", "X");
 		ArrayList<Integer> theNeurons =  new ArrayList<Integer>() ;
 		theNeurons.add(Xtemp.length);
 		theNeurons.add(50);
@@ -69,7 +68,6 @@ public class TrainingNeuralNetworks {
 			}
 			results[i]=max ;
 		}
-		
 		for(int i=0; i<results.length; i++)
 		{
 			System.out.println(results[i]);

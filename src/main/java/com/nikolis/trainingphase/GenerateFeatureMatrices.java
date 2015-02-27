@@ -10,9 +10,6 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import com.jmatio.io.MatFileReader;
-import com.jmatio.types.MLDouble;
-
 import featureexctraction.ProjectionHistogram;
 import featureexctraction.ZernikeMoments;
 
@@ -107,21 +104,6 @@ public class GenerateFeatureMatrices {
 			}
 	}
 	
-	public static double[][] readMatFile(String fileName, String arrayName)
-	{
-		MatFileReader matfilereader;
-		double[][] array =null ;
-		try
-		{
-			matfilereader = new MatFileReader(fileName);
-			MLDouble heta = (MLDouble)matfilereader.getMLArray(arrayName);
-			
-			array = heta.getArray() ; 
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		return array ; 
-	}
 	
 	public void exportTrainingSetMatrices(String name,String filePathToExamples)
 	{

@@ -4,12 +4,9 @@ package classifier.neuralnetworks.learning;
 
 import java.util.ArrayList;
 
-import com.jmatio.io.MatFileReader;
-import com.jmatio.types.MLDouble;
-import com.solveit.classifier.NeuralNetwork;
 
 import classifiers.neuralnetworks.learning.ArtificialNeuralNetwork;
-import classifiers.neuralnetworks.learning.ArtificialNeuralNetwork;
+
 /**
  * A Class designed to later contain the unit testing for Neural Networks 
  * at the moments is just demonstrating it's usage
@@ -45,7 +42,7 @@ public class NeuralNetworkTest {
 		neuralNetwork.loadInputs(x, y);
 		neuralNetwork.batchGradientDescemt(0.001, 0, 1000, 8);
 		
-		double[][] hypothesis = neuralNetwork.predict(x2, neuralNetworkNodes) ;
+		double[][] hypothesis = neuralNetwork.predict(x2) ;
 		
 		int[] results = new  int[hypothesis.length] ;
 		
