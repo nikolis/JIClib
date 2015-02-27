@@ -1,20 +1,15 @@
 package classifiers.neuralnetworks.utilities;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+
 import java.util.Random;
 
 
 
 
 
-import org.la4j.matrix.Matrix;
 import org.la4j.matrix.dense.Basic2DMatrix;
-import org.la4j.vector.Vector;
+import org.la4j.Vector;
+import org.la4j.Matrix;
 import org.la4j.vector.dense.BasicVector;
 
 public class NeuralHelper{
@@ -34,45 +29,6 @@ public class NeuralHelper{
 	    	}
 	    }
 	    return matrix ; 
-	}
-	
-	
-	/**
-	 * Responsible of writing a matrix in a comma separated values file 
-	 * @param matrix
-	 * @param name
-	 * @throws FileNotFoundException
-	 * @throws UnsupportedEncodingException
-	 */
-	public static void writeMatrixToFile(Matrix matrix, String name) throws FileNotFoundException, UnsupportedEncodingException
-	{
-		PrintWriter writer = new PrintWriter(name, "UTF-8");
-		for(int i=0; i<matrix.rows(); i++)
-		{
-			for(int j=0; j<matrix.columns();j++)
-			{
-				writer.write(String.valueOf(matrix.get(i, j))+",");
-			}
-			writer.write("\n");
-		}
-		writer.close();
-	}
-	
-	public static Matrix loadCsvFileInMatrix(String file,int rows, int columns) throws IOException
-	{
-		Matrix matrix = new Basic2DMatrix(rows, columns);
-		BufferedReader br = new BufferedReader(new FileReader(file)) ;
-		for(int i=0;i<rows; i++)
-		{
-			String temp = br.readLine();
-			String tempArr[] = temp.split(",");
-			for(int j=0; j<columns; j++)
-			{
-				matrix.set(i, j, Double.parseDouble(tempArr[j]));
-			}
-		}
-		br.close() ; 
-		return matrix ; 
 	}
 	
 	

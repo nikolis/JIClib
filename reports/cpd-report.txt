@@ -1,0 +1,395 @@
+Found a 9 line (128 tokens) duplication in the following files: 
+Starting at line 27 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ColorToGray.java
+Starting at line 57 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ColorToGray.java
+
+		BufferedImage grayImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType()) ; 
+		for(int i=0 ;i< originalImage.getWidth(); i++){
+			for (int j=0 ; j<originalImage.getHeight(); j++){
+			
+				//get Pixel's Colors
+				alpha = new Color(originalImage.getRGB(i, j)).getAlpha();
+				red = new Color(originalImage.getRGB(i, j)).getRed() ;
+				green = new Color(originalImage.getRGB(i, j)).getGreen() ; 
+				blue = new Color(originalImage.getRGB(i, j)).getBlue();
+=====================================================================
+Found a 22 line (90 tokens) duplication in the following files: 
+Starting at line 47 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\test\java\classifier\neuralnetworks\learning\NeuralNetworkTest.java
+Starting at line 55 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\com\nikolis\trainingphase\TrainingNeuralNetworks.java
+
+		double[][] hypothesis = NeuralNetworkPrediction.predict2(x2, neuralNetworkNodes) ;
+		
+		
+		
+		
+		int[] results = new  int[hypothesis.length] ;
+		
+		for(int i=0; i<results.length; i++)
+		{
+			int max = -1 ; 
+			double maxVal=-0.44 ; 
+			
+			for(int j=0; j<hypothesis[i].length; j++)
+			{
+				if(hypothesis[i][j]>=maxVal)
+				{
+					maxVal=hypothesis[i][j] ;
+					max=j ; 
+				}
+			}
+			results[i]=max ;
+		}
+=====================================================================
+Found a 7 line (83 tokens) duplication in the following files: 
+Starting at line 28 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\classifiers\neuralnetworks\learning\NeuralNetworkPrediction.java
+Starting at line 63 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\classifiers\neuralnetworks\learning\NeuralNetwork.java
+
+		for(int i=1; i<allTheAs.length; i++)
+		{
+			allTheAs[i]= NeuralHelper.addBias(allTheAs[i-1]) ;
+			allTheZs[i-1]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
+			allTheAs[i]=NeuralHelper.sigmoid(allTheZs[i-1]) ;
+		}
+		hipothesis=allTheAs[allTheAs.length-1] ;
+=====================================================================
+Found a 10 line (75 tokens) duplication in the following files: 
+Starting at line 26 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\general\utilities\trainSetPreperation.java
+Starting at line 46 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\general\utilities\trainSetPreperation.java
+
+		String name =imageToRead.substring(imageToRead.indexOf(".jpg")-2,imageToRead.indexOf(".jpg"))  ;
+		try{
+			image = ImageIO.read(new File(imageToRead));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		image2 = ColorToGray.toGrayLM(image) ;
+		image2 = ThresHolding.grayImage2Bin(image2) ; 
+		Labeling.mainMethod(image2, name);
+	}
+=====================================================================
+Found a 14 line (65 tokens) duplication in the following files: 
+Starting at line 40 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\featureexctraction\ProjectionHistogram.java
+Starting at line 67 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\featureexctraction\ProjectionHistogram.java
+
+	private static ArrayList<Double> findHorizontalHistogram(BufferedImage image, ArrayList<Double> PreHistogram)
+	{
+		ArrayList<Double> histogram ;
+		if(PreHistogram==null)
+		{
+			histogram = new ArrayList<Double>() ; 
+		}else
+		{
+			histogram= PreHistogram ; 
+		}
+		image = ColorToGray.toGrayAvg(image) ;
+		image = ThresHolding.grayImage2Bin(image);
+		
+		for(int i=0; i<image.getWidth(); i++)
+=====================================================================
+Found a 3 line (56 tokens) duplication in the following files: 
+Starting at line 24 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\utilities\MathematicalOperations.java
+Starting at line 27 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ColorToGray.java
+Starting at line 57 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ColorToGray.java
+
+		BufferedImage newImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType()) ; 
+		for(int i=0 ; i<originalImage.getWidth() ; i++){
+			for(int j=0 ; j<originalImage.getHeight() ; j++){
+=====================================================================
+Found a 5 line (50 tokens) duplication in the following files: 
+Starting at line 216 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\classifiers\neuralnetworks\learning\NeuralNetwork.java
+Starting at line 225 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\classifiers\neuralnetworks\learning\NeuralNetwork.java
+
+		final Matrix hipothesisLog = new Basic2DMatrix(hipothesis.rows(),hipothesis.columns()) ;
+		for(int i=0; i<hipothesis.rows(); i++)
+		{
+			for(int j=0; j<hipothesis.columns(); j++)
+			{
+=====================================================================
+Found a 7 line (48 tokens) duplication in the following files: 
+Starting at line 301 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 318 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+		int max= originalImage.getWidth();
+		
+		for(int i=0; i<originalImage.getWidth(); i++)
+		{
+			for(int j=0; j<originalImage.getHeight(); j++)
+			{
+					if(classes[i][j]==klass && i<max)
+=====================================================================
+Found a 5 line (47 tokens) duplication in the following files: 
+Starting at line 280 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 303 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+		for(int i=0; i<originalImage.getWidth(); i++)
+		{
+			for(int j=0; j<originalImage.getHeight(); j++)
+			{
+				if(classes[i][j]==klass && i>max)
+=====================================================================
+Found a 7 line (46 tokens) duplication in the following files: 
+Starting at line 224 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 301 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 318 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+		int offSetHeight = findOffsetHeight(klass) ;
+		
+		for(int i=0; i<originalImage.getWidth(); i++)
+		{
+			for(int j=0; j<originalImage.getHeight(); j++)
+			{
+				if(classes[i][j]==klass)
+=====================================================================
+Found a 5 line (46 tokens) duplication in the following files: 
+Starting at line 280 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 320 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+		for(int i=0; i<originalImage.getWidth(); i++)
+		{
+			for(int j=0; j<originalImage.getHeight(); j++)
+			{
+				if(classes[i][j]==klass && i>max)
+=====================================================================
+Found a 5 line (45 tokens) duplication in the following files: 
+Starting at line 226 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 280 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+		for(int i=0; i<originalImage.getWidth(); i++)
+		{
+			for(int j=0; j<originalImage.getHeight(); j++)
+			{
+				if(classes[i][j]==klass)
+=====================================================================
+Found a 9 line (43 tokens) duplication in the following files: 
+Starting at line 57 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\featureexctraction\ProjectionHistogram.java
+Starting at line 84 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\featureexctraction\ProjectionHistogram.java
+
+			for(int j=0; j<image.getHeight(); j++)
+			{
+				if(new Color (image.getRGB(i, j)).getRed()==0 )
+					counter++ ; 
+			}
+			histogram.add((double)counter) ; 
+		}
+		return histogram ; 
+	}
+=====================================================================
+Found a 4 line (37 tokens) duplication in the following files: 
+Starting at line 24 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\utilities\MathematicalOperations.java
+Starting at line 224 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 301 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 318 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+		BufferedImage newImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType()) ; 
+		for(int i=0 ; i<originalImage.getWidth() ; i++){
+			for(int j=0 ; j<originalImage.getHeight() ; j++){
+				if((i+kernel[1].length -1< originalImage.getWidth()) && (j+kernel.length-1<originalImage.getHeight())  ){
+=====================================================================
+Found a 3 line (36 tokens) duplication in the following files: 
+Starting at line 25 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\utilities\MathematicalOperations.java
+Starting at line 61 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 226 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 280 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 303 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 320 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+		for(int i=0 ; i<originalImage.getWidth() ; i++){
+			for(int j=0 ; j<originalImage.getHeight() ; j++){
+				if((i+kernel[1].length -1< originalImage.getWidth()) && (j+kernel.length-1<originalImage.getHeight())  ){
+=====================================================================
+Found a 3 line (35 tokens) duplication in the following files: 
+Starting at line 24 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\utilities\MathematicalOperations.java
+Starting at line 41 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 204 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 224 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 301 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 318 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 27 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ColorToGray.java
+Starting at line 57 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ColorToGray.java
+
+		BufferedImage newImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType()) ; 
+		for(int i=0 ; i<originalImage.getWidth() ; i++){
+			for(int j=0 ; j<originalImage.getHeight() ; j++){
+=====================================================================
+Found a 3 line (35 tokens) duplication in the following files: 
+Starting at line 15 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\utilities\GeneralImagingOperations.java
+Starting at line 209 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+		for(int i=0 ; i<originalImage.getWidth(); i++){
+			for(int j=0 ; j<originalImage.getHeight(); j++){
+				int intensity = new Color(originalImage.getRGB(i, j)).getRed();
+=====================================================================
+Found a 3 line (35 tokens) duplication in the following files: 
+Starting at line 29 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ThresHolding.java
+Starting at line 80 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ThresHolding.java
+
+				for(int i = 0 ; i<grayImage.getWidth(); i++){
+					for(int j=0 ; j<grayImage.getHeight(); j++){
+						int red = new Color(grayImage.getRGB(i, j)).getRed()  ;
+=====================================================================
+Found a 2 line (34 tokens) duplication in the following files: 
+Starting at line 25 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\utilities\MathematicalOperations.java
+Starting at line 15 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\utilities\GeneralImagingOperations.java
+Starting at line 42 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 61 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 209 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 226 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 280 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 303 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 320 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 28 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ColorToGray.java
+Starting at line 59 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ColorToGray.java
+
+		for(int i=0 ; i<originalImage.getWidth() ; i++){
+			for(int j=0 ; j<originalImage.getHeight() ; j++){
+=====================================================================
+Found a 4 line (34 tokens) duplication in the following files: 
+Starting at line 154 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\featureexctraction\ZernikeMoments.java
+Starting at line 176 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\featureexctraction\ZernikeMoments.java
+
+		for(int i=0; i<inputImage.getWidth(); i++)
+		{
+			for(int j=0; j<inputImage.getHeight(); j++)
+			{
+=====================================================================
+Found a 4 line (34 tokens) duplication in the following files: 
+Starting at line 23 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\classifiers\neuralnetworks\utilities\NeuralHelper.java
+Starting at line 38 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\classifiers\neuralnetworks\utilities\NeuralHelper.java
+
+	    for(int i=0; i<matrix.rows(); i++)
+	    {
+	    	for(int j=0; j<matrix.columns(); j++)
+	    	{
+=====================================================================
+Found a 4 line (34 tokens) duplication in the following files: 
+Starting at line 71 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\classifiers\neuralnetworks\utilities\NeuralHelper.java
+Starting at line 165 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\classifiers\neuralnetworks\utilities\NeuralHelper.java
+
+		for(int i=0 ; i<mat.rows(); i++)
+		{
+			for(int j=0 ; j<mat.columns(); j++)
+			{
+=====================================================================
+Found a 2 line (33 tokens) duplication in the following files: 
+Starting at line 19 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\LineraFileters.java
+Starting at line 21 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\LineraFileters.java
+
+	public static int[][]  linearFilterKernel1 = {{1, 1, 1}, {1, 2, 1}, {0, 0, 0}} ;
+	public static int[][]  linearFilterKernel2 = {{0, 1, 1}, {0, 2, 1}, {0, 1, 1}};
+=====================================================================
+Found a 10 line (31 tokens) duplication in the following files: 
+Starting at line 140 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\ThresHolding.java
+Starting at line 105 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\LineraFileters.java
+
+	}
+	
+	
+	
+	public static void main(String args[]){
+		//ThresHolding nik = new ThresHolding() ;
+		BufferedImage image = null ; 
+		BufferedImage image2 = null ; 
+		try{
+			image = ImageIO.read(new File("imagestest/grayAVG.jpg"));
+=====================================================================
+Found a 7 line (28 tokens) duplication in the following files: 
+Starting at line 66 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\utilities\MathematicalOperations.java
+Starting at line 87 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\utilities\MathematicalOperations.java
+
+	public static double calculateWeightedMean(int thresgold , int[] weights, boolean isBack){ 
+		double numerator = 0 ; 
+		double denominator = 0 ; 
+		int bonus ; 
+		
+		if(!isBack){
+			bonus=thresgold ; 
+=====================================================================
+Found a 2 line (28 tokens) duplication in the following files: 
+Starting at line 19 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\LineraFileters.java
+Starting at line 21 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\LineraFileters.java
+Starting at line 22 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\LineraFileters.java
+
+	public static int[][]  linearFilterKernel1 = {{1, 1, 1}, {1, 2, 1}, {0, 0, 0}} ;
+	public static int[][]  linearFilterKernel2 = {{0, 1, 1}, {0, 2, 1}, {0, 1, 1}};
+=====================================================================
+Found a 4 line (28 tokens) duplication in the following files: 
+Starting at line 88 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 155 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+				classes[i-1][j-1]=taksiPragmaton ;
+				Integer[] coordinates = new Integer[2] ; 
+				coordinates[0]=i-1; //autoBoxing
+				coordinates[1]=j-1 ;//autoBoxing
+=====================================================================
+Found a 5 line (28 tokens) duplication in the following files: 
+Starting at line 102 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 113 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+				coordinates[1] =j-1 ; 
+				searchingStack.push(coordinates) ;
+			}
+		}
+		if(i+1<originalImage.getWidth() && j-1>=0 && classes[i+1][j-1]==0)
+=====================================================================
+Found a 4 line (28 tokens) duplication in the following files: 
+Starting at line 110 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 132 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+				classes[i+1][j-1]=taksiPragmaton ; 
+				Integer[] coordinates = new Integer[2] ; 
+				coordinates[0]=i+1 ; 
+				coordinates[1] =j-1 ;
+=====================================================================
+Found a 5 line (28 tokens) duplication in the following files: 
+Starting at line 373 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 394 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+		Labeling labeling = new Labeling(image) ;
+		int klasis = labeling.putLabels();
+		for(int i=2; i<=klasis; i++)
+		{
+			labeling.paintTheRegions(i,name); 
+=====================================================================
+Found a 4 line (27 tokens) duplication in the following files: 
+Starting at line 88 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 155 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 166 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+				classes[i-1][j-1]=taksiPragmaton ;
+				Integer[] coordinates = new Integer[2] ; 
+				coordinates[0]=i-1; //autoBoxing
+				coordinates[1]=j-1 ;//autoBoxing
+=====================================================================
+Found a 4 line (27 tokens) duplication in the following files: 
+Starting at line 110 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 121 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 132 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+				classes[i+1][j-1]=taksiPragmaton ; 
+				Integer[] coordinates = new Integer[2] ; 
+				coordinates[0]=i+1 ; 
+				coordinates[1] =j-1 ;
+=====================================================================
+Found a 4 line (26 tokens) duplication in the following files: 
+Starting at line 99 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 144 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+				classes[i][j-1]=taksiPragmaton ; 
+				Integer[] coordinates= new Integer[2] ;
+				coordinates[0] = i ; 
+				coordinates[1] =j-1 ; 
+=====================================================================
+Found a 3 line (25 tokens) duplication in the following files: 
+Starting at line 88 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 110 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+				classes[i-1][j-1]=taksiPragmaton ;
+				Integer[] coordinates = new Integer[2] ; 
+				coordinates[0]=i-1; //autoBoxing
+=====================================================================
+Found a 3 line (25 tokens) duplication in the following files: 
+Starting at line 132 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+Starting at line 155 of C:\Users\310176547\Documents\workspace-sts-3.6.2.RELEASE\SolveIT\src\main\java\imageprocessing\tools\Labeling.java
+
+				classes[i+1][j+1] = taksiPragmaton ; 
+				Integer[] coordinates = new Integer[2] ;
+				coordinates[0]=i+1 ; 

@@ -16,7 +16,7 @@ public class ZernikeMoments
 	
 	
 	
-	public ZernikeMoments(BufferedImage BI)
+	public ZernikeMoments(final BufferedImage BI)
 	{
 		inputImage = BI ; 
 		normImage = new NormalizedImage() ; 
@@ -46,7 +46,7 @@ public class ZernikeMoments
 		}
 	}
 	
-	public ArrayList<Double> mainProcces(int order,int lambdaChoise)
+	public ArrayList<Double> mainProcces(final int order,final int lambdaChoise)
 	{
 		double lambda ,ZMpq; 
 		int moments =0; 
@@ -103,7 +103,7 @@ public class ZernikeMoments
 	
 	
 	
-	double directZernikePoly(int p, int q, double r)
+	double directZernikePoly(final int p, final int q, final double r)
 	{
 		double a1,a2,s,sum_index,numerator,denominator,R;
 		
@@ -124,7 +124,7 @@ public class ZernikeMoments
 	}
 
 
-	public static double factorial(double number)
+	public static double factorial(final double number)
 	{
 		if(number==0)
 		{
@@ -136,9 +136,8 @@ public class ZernikeMoments
 		}
 	}
 	
-	public void normalization(int choice)
+	public void normalization(final int choice)
 	{
-	
 		 double c1,c2;
 		 int count =0; 
 		if(choice==1)
@@ -204,6 +203,9 @@ public class ZernikeMoments
 			e.printStackTrace();
 		}			
 		ZernikeMoments zer = new ZernikeMoments(image) ; 		
-		zer.mainProcces(10,1);
+		for(double doub : zer.mainProcces(5,1))
+		{
+			System.out.println(doub);
+		}
 	}
 }

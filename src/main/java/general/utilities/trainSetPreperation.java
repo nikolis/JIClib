@@ -33,11 +33,12 @@ public class trainSetPreperation {
 		image2 = ThresHolding.grayImage2Bin(image2) ; 
 		Labeling.mainMethod(image2, name);
 	}
+	
 	/**
 	 * Overloaded method that the only  difference with the previous is that it can accept the Image as a parameter 
 	 * @param numberOfExample
 	 */
-	public static  void examples(int numberOfExample,String fileImage)
+	public static  void examples(int numberOfExample, String fileImage)
 	{
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
