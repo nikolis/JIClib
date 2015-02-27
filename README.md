@@ -38,4 +38,28 @@ Original Image:
   
 - Linear Filters 
   
- 
+ In our scope the foreground of an image is our base information, which we are going to use to classify the digits present on the image and so even minor changes in the image could yield better recognition rate at the end. We are using Linear Filters to Reduce the amount of noise present in the picture and this is what we get as an output:
+
+![](https://github.com/nikolis/SolveIT/blob/master/imagestest/binarizedImageFiltered.jpg)
+
+Next what we need to do is to extract the different digits from the image and create a new image out of them. So we need an algorithm to find the different components in the an image, to solve this problem we are using connected component analysis
+this the first 4 components that were extracted:
+
+component1:
+
+![](https://github.com/nikolis/SolveIT/blob/master/imagestest/subImage2ed.jpg)
+
+component2:
+
+![](https://github.com/nikolis/SolveIT/blob/master/imagestest/subImage3ed.jpg)
+
+component3:
+
+![](https://github.com/nikolis/SolveIT/blob/master/imagestest/subImage4ed.jpg)
+
+component4:
+
+![](https://github.com/nikolis/SolveIT/blob/master/imagestest/subImage5ed.jpg)
+
+
+### Feature Extraction 
