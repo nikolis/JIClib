@@ -24,7 +24,7 @@ public class NeuralHelper{
 	    {
 	    	for(int j=0; j<matrix.columns(); j++)
 	    	{
-	    		double randomNum = rand.nextDouble() * ((randMax - randMin) + 1) + randMin;
+	    		double randomNum = rand.nextDouble() * ((randMax - randMin)) + randMin;
 	    		matrix.set(i, j, randomNum);
 	    	}
 	    }

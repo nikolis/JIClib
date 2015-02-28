@@ -136,6 +136,17 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 			this.featureMatrix=new Basic2DMatrix(x);
 			this.classeMatrix= new Basic2DMatrix(y);
 	}
+	/**
+	 * This method only servers testing 
+	 * @param fileName
+	 */
+	public void loadPreTraindeThetas(String fileName)
+	{
+		for(int i=0; i<alltheThetas.length; i++)
+		{
+			alltheThetas[i]=new Basic2DMatrix(MatFileGenerator.readMatFile(fileName, "Theta"+(i+1))) ;
+		}
+	}
 	
 	
 	/**
@@ -263,7 +274,6 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 			allTheZs[i-1]=allTheAs[i].multiply(alltheThetas[i-1].transpose());
 			allTheAs[i]=NeuralHelper.sigmoid(allTheZs[i-1]) ;
 		}
-		
 		return NeuralHelper.matrix2Array(allTheAs[allTheAs.length-1]) ; 
 	}
 	
