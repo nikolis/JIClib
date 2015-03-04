@@ -25,8 +25,6 @@ public class TrainingNeuralNetworks {
 		thenn.add(50);
 		thenn.add(30);
 		thenn.add(50);
-		thenn.add(30);
-		thenn.add(50);
 		thenn.add(numberOfClasses); 
 		
 		ArtificialNeuralNetwork neuralNetwork = new ArtificialNeuralNetwork(thenn) ; 
@@ -44,8 +42,6 @@ public class TrainingNeuralNetworks {
 		double Xtemp[][] =MatFileGenerator.readMatFile("testSet.mat", "X");
 		ArrayList<Integer> theNeurons =  new ArrayList<Integer>() ;
 		theNeurons.add(Xtemp.length);
-		theNeurons.add(50);
-		theNeurons.add(30);
 		theNeurons.add(50);
 		theNeurons.add(30);
 		theNeurons.add(50);

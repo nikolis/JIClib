@@ -1,7 +1,12 @@
 package classifiers.neuralnetworks.utilities;
 
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
+
+
 
 
 
@@ -30,6 +35,25 @@ public class NeuralHelper{
 	    }
 	    return matrix ; 
 	}
+	
+	public static  double findMax(double[][] array)
+	{
+		double max = -1 ; 
+		for(int i=0; i<array.length; i++)
+		{
+			for(int j=0; j<array[0].length; j++)
+			{
+				if(max<=array[i][j])
+				{
+					max = array[i][j]; 
+				}
+			}
+		}
+		return max ; 
+	}
+	
+	
+	
 	
 	/**
 	 * The classes Matrix Contains number indicating the number 
@@ -84,14 +108,33 @@ public class NeuralHelper{
 	
 	public static void printMatrix(Matrix mat)
 	{
-		for(int i=0 ; i<mat.rows(); i++)
-		{
-			for(int j=0 ; j<mat.columns(); j++)
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter("latestMatrixprint.txt", "UTF-8");
+			
+			
+			
+			for(int i=0 ; i<mat.rows(); i++)
 			{
-				System.out.print(mat.get(i, j)+ " ");
-			} 
-			System.out.println();
+				for(int j=0 ; j<mat.columns(); j++)
+				{
+					System.out.print(mat.get(i, j)+ "    ");
+					writer.print(mat.get(i, j)+ "    ");
+				} 
+				System.out.print(i);
+				System.out.println();
+				writer.println(i);
+			}
+		
+			writer.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 	}
 	
 	public static Matrix createOnesMatrix(int x,int y)

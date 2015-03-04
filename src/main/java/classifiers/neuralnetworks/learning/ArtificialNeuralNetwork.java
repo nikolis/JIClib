@@ -126,16 +126,29 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 	
 	
 	/**
-	 * FeatureMatrix contains features and classMatrix contains
-	 * the number of class that the corresponding row of featuresMatrix represents
+	 * Test Serving Method
 	 * @param x
 	 * @param y
 	 */
-	public void loadInputs(final double x[][],final double y[][])
+	public void loadInputs(final double x[][],final double y[][], int numberOfClasses)
 	{			
 			this.featureMatrix=new Basic2DMatrix(x);
 			this.classeMatrix= new Basic2DMatrix(y);
+			//int numberOfClasses = (int) NeuralHelper.findMax(y)+1 ; 
+			
+			this.classeMatrix = NeuralHelper.convertClasseMatrix(numberOfClasses, classeMatrix);
 	}
+	
+	@Override
+	public void loadInputs(double[][] x, double[][] y)
+	{
+		this.featureMatrix=new Basic2DMatrix(x);
+		this.classeMatrix= new Basic2DMatrix(y);
+		int numberOfClasses = (int) NeuralHelper.findMax(y)+1 ; 
+		this.classeMatrix = NeuralHelper.convertClasseMatrix(numberOfClasses, classeMatrix);		
+	}
+	
+	
 	/**
 	 * This method only servers testing 
 	 * @param fileName
@@ -162,8 +175,6 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 		{
 			alltheThetas[i]=NeuralHelper.createsRanomsMatrix(this.neuralNetworkArchitectures.get(i+1), neuralNetworkArchitectures.get(i)+1) ; 
 		}
-	
-		this.classeMatrix = NeuralHelper.convertClasseMatrix(numberOfClasses, classeMatrix);
 		NeuralHelper.printMatrix(classeMatrix);
 		for(int i=0; i<numOfIterations; i++)
 		{
@@ -182,43 +193,22 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 
 	}
 
-		
-
-	
-	
-	
 	/**
-	 * This is method is used to compute the regularisation
-	 *  terms  that is going to be added to the gradient 
-	 *  in order to help us control the problem of overfiting . 
+	 * This is method is used to compute the Regularization terms  that is going to
+	 * be added to the Cost  in order to help us control the problem of Overfitting . 
 	 * @param lambda
 	 * @return
 	 */
-	/*double computeRegTerm(double lambda)
+	double computeRegTerm(double lambda)
 	{
-		Matrix regTheta1 = new Basic2DMatrix(Theta1.rows(), Theta1.columns()-1);
-		Matrix regTheta2 = new Basic2DMatrix(Theta2.rows(), Theta2.columns()-1);
+		double costRegularization = 0 ; 
 		
-		for(int i=0; i<Theta1.rows(); i++)
+		for(int i=0; i<alltheThetas.length; i++)
 		{
-			for(int j=1; j<Theta1.columns(); j++)
-			{
-				regTheta1.set(i, j-1, Theta1.get(i, j));
-			}
+			costRegularization+=  NeuralHelper.returnAllRowsAndGivenCollumns(alltheThetas[i], 1).hadamardProduct(NeuralHelper.returnAllRowsAndGivenCollumns(alltheThetas[i], 1)).sum() ;
 		}
-		
-		for(int i=0; i<Theta2.rows(); i++)
-		{
-			for(int j=1; j<Theta2.columns(); j++)
-			{
-				regTheta2.set(i, j-1, Theta2.get(i, j));
-			}
-		}
-		regTheta1= regTheta1.hadamardProduct(regTheta1);
-		regTheta2= regTheta2.hadamardProduct(regTheta2);l
-		double subRegTerm = regTheta1.sum()+regTheta2.sum(); 
-		return (lambda/(2*featureMatrix.rows())) * subRegTerm ;
-	}*/
+		return (lambda/(2*featureMatrix.rows()))*costRegularization ; 
+	}
 	
 	
 	/**
@@ -228,31 +218,27 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 	 * @param lambda
 	 * @return
 	 */
-	private double computeCost(final Matrix hipothesis,final double lambda)
-	{
+	public  double computeCost(Matrix hipothesis,final double lambda)
+	{	
 		final Matrix hipothesislogminus = new Basic2DMatrix(hipothesis.rows(), hipothesis.columns());
 		final Matrix hipothesisLog = new Basic2DMatrix(hipothesis.rows(),hipothesis.columns()) ;
+		
 		for(int i=0; i<hipothesis.rows(); i++)
 		{
 			for(int j=0; j<hipothesis.columns(); j++)
 			{
-				hipothesisLog.set(i, j, Math.log(hipothesis.get(i, j)));
-				hipothesislogminus.set(i, j, Math.log(1-hipothesis.get(i, j)));
+				hipothesisLog.set(i, j, Math.log(hipothesis.get(i, j)     ));
+				hipothesislogminus.set(i, j, Math.log(1-hipothesis.get(i, j) ));
 			}
 		}
-		
 		final Matrix ones = NeuralHelper.createOnesMatrix(classeMatrix.rows(), classeMatrix.columns()) ;
 		Matrix temp = classeMatrix.multiply(-1);
-		temp= temp.hadamardProduct(hipothesis) ; 
+		temp= temp.hadamardProduct(hipothesisLog) ;
 		final Matrix	temp2 = ones.subtract(classeMatrix).hadamardProduct(hipothesislogminus) ;
 		temp= temp.subtract(temp2) ;
 		
-		return temp.sum()/featureMatrix.rows();//+computeRegTerm(lambda); 
+		return temp.sum()/featureMatrix.rows()+computeRegTerm(lambda); 
 	}
-	
-	
-	
-	
 	
 	public static  double[][]  predict(double Xin[][], ArrayList<Integer> theNeurons)
 	{	
