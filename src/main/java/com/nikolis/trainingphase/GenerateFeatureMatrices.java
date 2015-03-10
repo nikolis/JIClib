@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
@@ -18,7 +19,7 @@ public class GenerateFeatureMatrices {
 	
 	private ArrayList<ArrayList<Double>> examplesFeatures ;
 	private ArrayList<Double> examplesClasses ;
-	private static final int  numberOfMoments =2 ;
+	private static final int  numberOfMoments =7 ;
 	featureExtractionTechnique technique ; 
 	
 	public GenerateFeatureMatrices(featureExtractionTechnique technique)
@@ -40,11 +41,12 @@ public class GenerateFeatureMatrices {
 	 * @param sumbolToExtractFeatures
 	 * @param pathToRootFile
 	 */
-	private void creatingXandYs(String sumbolToExtractFeatures,String pathToRootFile)
+	private void creatingXandYs(String sumbolToExtractFeatures,String pathToRootFile, int orderOfFeatures)
 	{	
 		File folder = new File(pathToRootFile+"/"+sumbolToExtractFeatures);
 		File[] listOfFiles = folder.listFiles();
 		ArrayList<Double> featuresForSingleExample = null ;
+		ArrayList<Double> highOrderFeatures = new ArrayList<Double>() ; 
 		BufferedImage image ; 
 		    for (int i = 0; i < listOfFiles.length; i++) 
 		    {
@@ -69,6 +71,18 @@ public class GenerateFeatureMatrices {
 								featuresForSingleExample = ProjectionHistogram.findHistogram(image, ProjectionHistogram.typeOfProjection.HorizontalAndVertical) ;
 								break;
 					}
+					Iterator<Double> iterator = featuresForSingleExample.iterator() ; 
+					
+					for(int order=2; order<=orderOfFeatures; order++)
+					{
+						while(iterator.hasNext())
+						{
+							double feature = iterator.next() ; 
+							double highFeature = Math.pow(feature, order);
+							highOrderFeatures.add(highFeature) ; 
+						}
+					}
+					featuresForSingleExample.addAll(highOrderFeatures) ; 
 					examplesFeatures.add(featuresForSingleExample);
 					examplesClasses.add((double)getclassNumber(sumbolToExtractFeatures));
 					}  catch (IOException e) 
@@ -80,12 +94,12 @@ public class GenerateFeatureMatrices {
 	}
 	
 	
-	private void createExampleFeatureAndClassesArrays(String filePathToExamples)
+	private void createExampleFeatureAndClassesArrays(String filePathToExamples, int orderOfFeatures)
 	{
-		creatingXandYs("0",filePathToExamples);
-		creatingXandYs("1",filePathToExamples);
-		creatingXandYs("2",filePathToExamples);
-		creatingXandYs("3",filePathToExamples);
+		creatingXandYs("0",filePathToExamples, orderOfFeatures);
+		creatingXandYs("1",filePathToExamples, orderOfFeatures);
+		creatingXandYs("2",filePathToExamples, orderOfFeatures);
+		creatingXandYs("3",filePathToExamples, orderOfFeatures);
 	}
 	
 	private int getclassNumber(String SymbolToExtract)
@@ -105,9 +119,9 @@ public class GenerateFeatureMatrices {
 	}
 	
 	
-	public void exportTrainingSetMatrices(String name,String filePathToExamples)
+	public void exportTrainingSetMatrices(String name,String filePathToExamples, int orderOfFeatures)
 	{
-		createExampleFeatureAndClassesArrays(filePathToExamples) ;
+		createExampleFeatureAndClassesArrays(filePathToExamples, orderOfFeatures) ;
 		MatFileGenerator matfileGen = new MatFileGenerator(name) ; 
 		double[][] classes = GeneralArraysUtilityClass.convertArrayListToNormalArray(examplesClasses) ;
 		double[][] features = GeneralArraysUtilityClass.convertArrayListToNormalArray2(examplesFeatures) ;

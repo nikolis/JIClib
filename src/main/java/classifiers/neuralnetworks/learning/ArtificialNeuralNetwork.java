@@ -85,7 +85,7 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 	 * the delta terms and the gradients for the Theta matrixes
 	 * @param lambda
 	 */
-	private void backPropagation(final double lambda)
+	public  void backPropagation(final double lambda)
 	{	
 		allTheAs[0]=featureMatrix ;
 		
@@ -106,6 +106,7 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 			alltheds[i]= temp2.hadamardProduct(NeuralHelper.sigmoidGradient(temperor)) ; 
 			alltheds[i]=NeuralHelper.returnAllRowsAndGivenCollumns(alltheds[i], 1) ;
 		}
+	
 		
 		for(int i=0; i<allTheRegTerms.length; i++)
 		{
@@ -122,6 +123,7 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 		{
 			allTheThetaGreds[i]=allTheDs[i].divide(featureMatrix.rows()).add(allTheRegTerms[i]) ;
 		}
+	
 	}
 	
 	
@@ -173,7 +175,7 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 	{
 		for(int i=0; i<alltheThetas.length; i++)
 		{
-			alltheThetas[i]=NeuralHelper.createsRanomsMatrix(this.neuralNetworkArchitectures.get(i+1), neuralNetworkArchitectures.get(i)+1) ; 
+			alltheThetas[i]=NeuralHelper.createMatrixOfDoublesWithRandomValues(0.12, -0.12, this.neuralNetworkArchitectures.get(i+1), neuralNetworkArchitectures.get(i)+1) ; 
 		}
 		NeuralHelper.printMatrix(classeMatrix);
 		for(int i=0; i<numOfIterations; i++)
@@ -183,6 +185,11 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 			{
 				alltheThetas[j] = alltheThetas[j].subtract(allTheThetaGreds[j].multiply(alpha).multiply(computeCost(hipothesis, lambda))) ; 
 			}
+			
+			if(i%100==0)
+			{
+				System.out.println(computeCost(hipothesis, lambda)+" In the Iteration : "+i);
+			}
 		}
 		final MatFileGenerator matfile = new MatFileGenerator("Thetas.mat") ;
 		for(int i=0; i<alltheThetas.length; i++)
@@ -190,7 +197,6 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 			matfile.addArray(NeuralHelper.matrix2Array(alltheThetas[i]), "Theta"+i);
 		}
 		matfile.writeFile() ;
-
 	}
 
 	/**

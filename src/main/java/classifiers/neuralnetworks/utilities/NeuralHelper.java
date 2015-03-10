@@ -111,27 +111,22 @@ public class NeuralHelper{
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter("latestMatrixprint.txt", "UTF-8");
-			
-			
-			
+		
 			for(int i=0 ; i<mat.rows(); i++)
 			{
+				System.out.println("the row : " +i);
 				for(int j=0 ; j<mat.columns(); j++)
 				{
 					System.out.print(mat.get(i, j)+ "    ");
 					writer.print(mat.get(i, j)+ "    ");
 				} 
-				System.out.print(i);
-				System.out.println();
 				writer.println(i);
 			}
 		
 			writer.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

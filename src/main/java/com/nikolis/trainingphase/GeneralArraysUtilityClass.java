@@ -22,7 +22,7 @@ import java.util.ArrayList;
 		for(int i=0; i<arrayList.size(); i++)
 		{
 			ArrayList<Double> temp = arrayList.get(i) ;
-			for(int j=0; j<temp.size(); j++)
+			for(int j=0; j<arrayList.get(0).size(); j++)
 			{
 				normalArray[i][j] = temp.get(j);
 			}

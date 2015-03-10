@@ -59,6 +59,8 @@ public class ArtificialNeuralNetworkTest {
 		if(!String.format("%.6f", costWithReg).equals(String.format("%.6f", 0.38377)))
 			assertion=false ;
 		
+		artif.backPropagation(1);
+		
 		assertTrue(assertion);
 		
 	}
