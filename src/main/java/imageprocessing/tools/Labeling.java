@@ -383,7 +383,7 @@ public class Labeling {
 		BufferedImage image = null ; 
 		BufferedImage image2 = null ; 
 		BufferedImage image12=null;
-		String filetoread = "imagestest/binarizedImageFiltered.jpg" ;
+		String filetoread = "imagestest/numbers3.jpg" ;
 		try{
 			image = ImageIO.read(new File(filetoread));
 			image12 = ThresHolding.grayImage2Bin(image) ;

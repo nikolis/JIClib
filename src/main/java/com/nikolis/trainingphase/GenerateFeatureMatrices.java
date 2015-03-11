@@ -19,7 +19,7 @@ public class GenerateFeatureMatrices {
 	
 	private ArrayList<ArrayList<Double>> examplesFeatures ;
 	private ArrayList<Double> examplesClasses ;
-	private static final int  numberOfMoments =7 ;
+	private static final int  numberOfMoments =4 ;
 	featureExtractionTechnique technique ; 
 	
 	public GenerateFeatureMatrices(featureExtractionTechnique technique)
@@ -100,6 +100,13 @@ public class GenerateFeatureMatrices {
 		creatingXandYs("1",filePathToExamples, orderOfFeatures);
 		creatingXandYs("2",filePathToExamples, orderOfFeatures);
 		creatingXandYs("3",filePathToExamples, orderOfFeatures);
+		creatingXandYs("4",filePathToExamples, orderOfFeatures);
+		creatingXandYs("5",filePathToExamples, orderOfFeatures);
+		creatingXandYs("6",filePathToExamples, orderOfFeatures);
+		creatingXandYs("7",filePathToExamples, orderOfFeatures);
+		creatingXandYs("8",filePathToExamples, orderOfFeatures);
+		creatingXandYs("9",filePathToExamples, orderOfFeatures);
+		
 	}
 	
 	private int getclassNumber(String SymbolToExtract)

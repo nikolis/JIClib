@@ -14,7 +14,7 @@ import classifiers.neuralnetworks.learning.ArtificialNeuralNetwork;
 public class TrainingNeuralNetworks {
 	
 	
-	static final  int numberOfClasses = 4 ; 
+	static final  int numberOfClasses = 10 ; 
 	static public featureExtractionTechnique featureExtractionTeqchniqueUsed ; 
 	
 	public NeuralNetwork trainNeuralNetWork()
@@ -24,14 +24,14 @@ public class TrainingNeuralNetworks {
 		ArrayList<Integer> thenn =  new ArrayList<Integer>() ;
 	
 		thenn.add(X[0].length);
-		thenn.add(5);
-		thenn.add(5);
+		thenn.add(10);
+		thenn.add(10);
 		thenn.add(numberOfClasses); 
 		
 		ArtificialNeuralNetwork neuralNetwork = new ArtificialNeuralNetwork(thenn) ; 
 		
 		neuralNetwork.loadInputs(X, Y);
-		neuralNetwork.batchGradientDescemt(0.1, 0, 100000, numberOfClasses);
+		neuralNetwork.batchGradientDescemt(0.1, 0, 60000, numberOfClasses);
 		return neuralNetwork ; 
 	}
 	
@@ -116,10 +116,11 @@ public class TrainingNeuralNetworks {
 	{
 		TrainingNeuralNetworks trnn = new TrainingNeuralNetworks() ; 
 		TrainingNeuralNetworks.featureExtractionTeqchniqueUsed = featureExtractionTechnique.ZernikeMoment ; 
-		trnn.generateTrainSetMatrices();
+		//trnn.generateTrainSetMatrices();
 		NeuralNetwork nn = trnn.trainNeuralNetWork() ; 
 		trnn.calculateTestSetAccuraccy(nn);
-		//trnn.calculateTestSetAccuraccy2(nn);
+		System.out.println("------------------------------------------------------------->");
+		trnn.calculateTestSetAccuraccy2(nn);
 	}
 	
 }
