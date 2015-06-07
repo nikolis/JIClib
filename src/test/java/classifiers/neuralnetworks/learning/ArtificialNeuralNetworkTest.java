@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 import org.la4j.matrix.dense.Basic2DMatrix;
 
-import com.nikolis.trainingphase.MatFileGenerator;
+import general.utilities.MatFileGenerator;
 
 public class ArtificialNeuralNetworkTest {
 

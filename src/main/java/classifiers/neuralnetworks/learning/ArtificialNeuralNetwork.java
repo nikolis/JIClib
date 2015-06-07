@@ -8,15 +8,14 @@ import classifiers.neuralnetworks.utilities.*;
 import org.la4j.matrix.dense.Basic2DMatrix;
 import org.la4j.Matrix;
 
-import com.nikolis.trainingphase.MatFileGenerator;
-import com.solveit.classifier.NeuralNetwork;
+import general.utilities.MatFileGenerator;
 
 /**
  * A class That Implements Artificial Neural Networks 
  * @author Nikolaos Galerakis
  *
  */
-public class ArtificialNeuralNetwork implements NeuralNetwork{
+public class ArtificialNeuralNetwork {
  
 	/**
 	 * The Matrix containing the Features for the training Set 
@@ -141,7 +140,7 @@ public class ArtificialNeuralNetwork implements NeuralNetwork{
 			this.classeMatrix = NeuralHelper.convertClasseMatrix(numberOfClasses, classeMatrix);
 	}
 	
-	@Override
+	
 	public void loadInputs(double[][] x, double[][] y)
 	{
 		this.featureMatrix=new Basic2DMatrix(x);

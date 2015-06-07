@@ -3,6 +3,9 @@
   <groupId>luckynumbers</groupId>
   <artifactId>SolveIT</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
+  <packaging>jar</packaging>
+  
  	<dependencies>
  		<dependency>
 		  <groupId>org.la4j</groupId>
