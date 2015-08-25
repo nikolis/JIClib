@@ -1,8 +1,8 @@
 # Java Image Classification Library
 
-<h3>Implemented Techniques<h3>
+<h3>Implemented Techniques</h3>
  
- <b>Pre-Proccessing<b>
+ <b>Pre-Proccessing</b>
    
    * RGB to Gray Converter(Average ,Luminance)
    * Image Binarization (Otsu's Threshold Method)
