@@ -7,6 +7,7 @@
    * RGB to Gray Converter(Average ,Luminance)
    * Image Binarization (Otsu's Threshold Method)
    * Image Segmentation (Connected Component Analysis)
+   * Image Size Scaling (Nearest Neibour)
  
 <b>Feature Extraction</b>
    * Zernike Moments
