@@ -52,24 +52,24 @@ public class nearesNeibour {
 	}
 	
 	public static void main(String args[]) {
+		String pathToImage = args[0] ; 
+		String pathToScaledImage = args[1];
+		int width = Integer.parseInt(args[2]);
+		int height= Integer.parseInt(args[3]);
+		
 		BufferedImage image = null ;
-		BufferedImage image2 = null ;
-		BufferedImage endImage2 ; 
 		BufferedImage endImage ; 
 		try{
-			image = ImageIO.read(new File("/home/nikolis/Pictures/3s2.jpg"));
-			image2 = ImageIO.read(new File("/home/nikolis/Pictures/4s2.jpg"));
+			///home/nikolis/Pictures/3s2.jpg
+			image = ImageIO.read(new File(pathToImage));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		endImage = resizeImage(image, 300, 300) ; 
-		endImage2= resizeImage(image2, 300, 300) ; 
-		try{
-			ImageIO.write(endImage,"jpg", new File("/home/nikolis/Pictures/4s22.jpg")) ;
-			ImageIO.write(endImage2,"jpg", new File("/home/nikolis/Pictures/5s22.jpg")) ;
+		endImage = resizeImage(image, width, height) ; 
+		try{///home/nikolis/Pictures/4s22.jpg
+			ImageIO.write(endImage,"jpg", new File(pathToScaledImage)) ;
 		}catch(Exception e){
 			e.printStackTrace(); 
 		}
 	}
-	
 }

@@ -161,7 +161,7 @@ public class Labeling {
 		return offSet;
 	}
 
-	private void paintTheRegions(int klass, String tade, int numberOfExamples) {
+	private void paintTheRegions(int klass, String path, String klassName) {
 		returnImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType());
 		int newPixel;
 		int alpha = new Color(originalImage.getRGB(0, 0)).getAlpha();
@@ -189,7 +189,18 @@ public class Labeling {
 
 		returnImage = createImageFromKlass(returnImage, klass);
 		try {
-			ImageIO.write(returnImage, "jpg", new File("/home/nikolis/Pictures/" + klass + tade + ".jpg"));
+			int numb =0 ; 
+			File file = new File(path +numb+ ".jpg") ; 
+			
+			path = path+"/"+klassName ;
+			File directorie = new File(path) ;
+			if(!directorie.exists())
+				directorie.mkdir() ; 
+			while(file.exists()){
+				numb++ ;
+				file = new File(path +"/"+ String.valueOf(numb)+ ".jpg") ; 
+			}
+			ImageIO.write(returnImage, "jpg", file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -261,7 +272,7 @@ public class Labeling {
 		}
 		return max;
 	}
-
+/*
 	public static void mainMethod(BufferedImage image, String name) {
 		image = ThresHolding.grayImage2Bin(image);
 		Labeling labeling = new Labeling(image);
@@ -269,13 +280,13 @@ public class Labeling {
 		for (int i = 2; i <= klasis; i++) {
 			labeling.paintTheRegions(i, name);
 		}
-	}
+	}*/
 
-	public static void sliceImage(BufferedImage image, String path, int numberOfExamplesPerKlass) {
+	public static void sliceImage(BufferedImage image, String path, String className) {
 	Labeling labeling = new Labeling(image);
 		int klasis = labeling.putLabels();
 		for (int i = 2; i <= klasis; i++) {
-			labeling.paintTheRegions(i, "testStoLimit", numberOfExamplesPerKlass);
+			labeling.paintTheRegions(i, path, className);
 		}
 	}
 }
