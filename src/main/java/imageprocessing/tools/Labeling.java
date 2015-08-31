@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
@@ -69,7 +70,7 @@ public class Labeling {
 				searchingStack.push(coordinates);
 			}
 		}
-		
+
 		if (j - 1 >= 0) {
 			if (isBlack(i, j - 1) && classes[i][j - 1] == 0) {
 				classes[i][j - 1] = taksiPragmaton;
@@ -79,7 +80,7 @@ public class Labeling {
 				searchingStack.push(coordinates);
 			}
 		}
-		
+
 		if (i + 1 < originalImage.getWidth() && j - 1 >= 0 && classes[i + 1][j - 1] == 0) {
 			if (isBlack(i + 1, j - 1) && classes[i + 1][j - 1] == 0) {
 				classes[i + 1][j - 1] = taksiPragmaton;
@@ -89,7 +90,7 @@ public class Labeling {
 				searchingStack.push(coordinates);
 			}
 		}
-		
+
 		if (i + 1 < originalImage.getWidth() && classes[i + 1][j] == 0) {
 			if (isBlack(i + 1, j) && classes[i + 1][j] == 0) {
 				classes[i + 1][j] = taksiPragmaton;
@@ -99,7 +100,7 @@ public class Labeling {
 				searchingStack.push(coordinates);
 			}
 		}
-		
+
 		if (i + 1 < originalImage.getWidth() && j + 1 < originalImage.getHeight() && classes[i + 1][j + 1] == 0) {
 			if (isBlack(i + 1, j + 1) && classes[i + 1][j + 1] == 0) {
 				classes[i + 1][j + 1] = taksiPragmaton;
@@ -110,7 +111,7 @@ public class Labeling {
 			}
 
 		}
-		
+
 		if (j + 1 < originalImage.getHeight() && classes[i][j + 1] == 0) {
 			if (isBlack(i, j + 1) && classes[i][j + 1] == 0) {
 				classes[i][j + 1] = taksiPragmaton;
@@ -120,7 +121,7 @@ public class Labeling {
 				searchingStack.push(coordinates);
 			}
 		}
-		
+
 		if (i - 1 >= 0 && j + 1 < originalImage.getHeight() && classes[i - 1][j + 1] == 0) {
 			if (isBlack(i - 1, j + 1) && classes[i - 1][j + 1] == 0) {
 				classes[i - 1][j + 1] = taksiPragmaton;
@@ -130,7 +131,7 @@ public class Labeling {
 				searchingStack.push(coordinates);
 			}
 		}
-		
+
 		if (i - 1 >= 0 && classes[i - 1][j] == 0) {
 			if (isBlack(i - 1, j) && classes[i - 1][j] == 0) {
 				classes[i - 1][j] = taksiPragmaton;
@@ -151,7 +152,7 @@ public class Labeling {
 		return offSet;
 	}
 
-	public int findOffsetHeight(int klass) {
+	private int findOffsetHeight(int klass) {
 		int halfObjectHeight = (findBotMostForClass(klass) - findTopMostForClass(klass) + 1) / 2;
 		int halfImageHeight = (originalImage.getHeight() / 2);
 		int pointToStart = halfImageHeight - halfObjectHeight;
@@ -160,7 +161,7 @@ public class Labeling {
 		return offSet;
 	}
 
-	private void paintTheRegions(int klass, String tade) {
+	private void paintTheRegions(int klass, String tade, int numberOfExamples) {
 		returnImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType());
 		int newPixel;
 		int alpha = new Color(originalImage.getRGB(0, 0)).getAlpha();
@@ -175,7 +176,7 @@ public class Labeling {
 				returnImage.setRGB(i, j, newPixel2);
 			}
 		}
-		
+
 		int offSetWidth = findOffsetWidth(klass);
 		int offSetHeight = findOffsetHeight(klass);
 		for (int i = 0; i < originalImage.getWidth(); i++) {
@@ -185,7 +186,7 @@ public class Labeling {
 				}
 			}
 		}
-		
+
 		returnImage = createImageFromKlass(returnImage, klass);
 		try {
 			ImageIO.write(returnImage, "jpg", new File("/home/nikolis/Pictures/" + klass + tade + ".jpg"));
@@ -195,17 +196,17 @@ public class Labeling {
 	}
 
 	private BufferedImage createImageFromKlass(BufferedImage originalImage, int klass) {
-		int rigtMost = findRightMostForClass(klass) ;
-		int leftMost = findLeftMostForClass(klass) ; 
-		int topMost = findTopMostForClass(klass) ;
-		int botMost = findBotMostForClass(klass) ;
-		BufferedImage returnImage = new BufferedImage(rigtMost-leftMost, botMost-topMost, originalImage.getType());
-		
+		int rigtMost = findRightMostForClass(klass);
+		int leftMost = findLeftMostForClass(klass);
+		int topMost = findTopMostForClass(klass);
+		int botMost = findBotMostForClass(klass);
+		BufferedImage returnImage = new BufferedImage(rigtMost - leftMost, botMost - topMost, originalImage.getType());
+
 		for (int j = topMost, retImageHeight = 0; j < botMost; j++, retImageHeight++) {
-			for (int i = leftMost, retImWidth = 0; i < rigtMost ; i++, retImWidth++) {
-				if(classes[i][j]==klass) {
+			for (int i = leftMost, retImWidth = 0; i < rigtMost; i++, retImWidth++) {
+				if (classes[i][j] == klass) {
 					returnImage.setRGB(retImWidth, retImageHeight, 0);
-				}else {
+				} else {
 					returnImage.setRGB(retImWidth, retImageHeight, -1);
 				}
 			}
@@ -270,30 +271,11 @@ public class Labeling {
 		}
 	}
 
-	public static void main(String args[]) {
-		BufferedImage image = null;
-		BufferedImage image2 = null;
-		BufferedImage image12 = null;
-		String filetoread = "/home/nikolis/Pictures/plus2.jpg";
-		try {
-			image = ImageIO.read(new File(filetoread));
-			image12 = ThresHolding.grayImage2Bin(image);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		String tade = filetoread.substring(filetoread.indexOf(".jpg") - 2, filetoread.indexOf(".jpg"));
-		Labeling labeling = new Labeling(image12);
+	public static void sliceImage(BufferedImage image, String path, int numberOfExamplesPerKlass) {
+	Labeling labeling = new Labeling(image);
 		int klasis = labeling.putLabels();
 		for (int i = 2; i <= klasis; i++) {
-			labeling.paintTheRegions(i, tade);
+			labeling.paintTheRegions(i, "testStoLimit", numberOfExamplesPerKlass);
 		}
-		image2 = labeling.returnImage;
-
-		try {
-			ImageIO.write(labeling.returnImage, "jpg", new File("/home/nikolis/Pictures/output.jpg"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 	}
 }
