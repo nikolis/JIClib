@@ -54,7 +54,6 @@ public class ColorToGray {
 	 */
 	public static BufferedImage toGrayLM(BufferedImage originalImage) {
 		int alpha, red, green, blue;
-		int newPixel;
 		int weightedMean;
 		BufferedImage greyImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(),
 				originalImage.getType());

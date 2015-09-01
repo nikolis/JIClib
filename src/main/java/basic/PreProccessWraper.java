@@ -1,13 +1,11 @@
 package basic;
 
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.nio.Buffer;
+
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.Line;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 
@@ -18,6 +16,7 @@ import imageprocessing.tools.ColorToGray;
 import imageprocessing.tools.Labeling;
 import imageprocessing.tools.LineraFileters;
 import imageprocessing.tools.ThresHolding;
+import imageprocessing.tools.nearesNeibour;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
@@ -54,6 +53,7 @@ public class PreProccessWraper {
 				originalImage = ThresHolding.grayImage2Bin(originalImage) ;
 				originalImage = LineraFileters.filterImage(originalImage) ;
 				Labeling.sliceImage(originalImage, pathToOutPut, klassName);
+				nearesNeibour.sizeScaleAllImagesInAdirectory(pathToOutPut+"/"+klassName, 300, 300);
             }
         }
         

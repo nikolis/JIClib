@@ -10,66 +10,66 @@ import imageprocessing.utilities.GeneralImagingOperations;
 
 public class nearesNeibour {
 
-	
-	
-	public static int[] resizePixels(int[] pixels,int w1,int h1,int w2,int h2) {
-	    int[] temp = new int[w2*h2] ;
-	    double x_ratio = w1/(double)w2 ;
-	    double y_ratio = h1/(double)h2 ;
-	    double px, py ; 
-	    for (int i=0;i<h2;i++) {
-	        for (int j=0;j<w2;j++) {
-	            px = Math.floor(j*x_ratio) ;
-	            py = Math.floor(i*y_ratio) ;
-	            temp[(i*w2)+j] = pixels[(int)((py*w1)+px)] ;
-	        }
-	    }
-	    return temp ;
-	}
-	
-	public static BufferedImage resizeImage(BufferedImage originalImage, int newHeight, int newWidth) {
-		BufferedImage newImage = new BufferedImage(newWidth, newHeight, originalImage.getType()) ;
-		
-		int[] pixelsBuffer  = new int[originalImage.getHeight()*originalImage.getWidth()] ;
-		
-		for(int i=0; i<originalImage.getWidth(); i++) {
-			for(int j=0; j<originalImage.getHeight(); j++){
-				pixelsBuffer[j*originalImage.getWidth()+ i] =  new Color(originalImage.getRGB(i, j)).getRed()  ;
+	private static int[] resizePixels(int[] pixels, int w1, int h1, int w2, int h2) {
+		int[] temp = new int[w2 * h2];
+		double x_ratio = w1 / (double) w2;
+		double y_ratio = h1 / (double) h2;
+		double px, py;
+		for (int i = 0; i < h2; i++) {
+			for (int j = 0; j < w2; j++) {
+				px = Math.floor(j * x_ratio);
+				py = Math.floor(i * y_ratio);
+				temp[(i * w2) + j] = pixels[(int) ((py * w1) + px)];
 			}
 		}
-		
-		pixelsBuffer = resizePixels(pixelsBuffer, originalImage.getWidth(), originalImage.getHeight(), newWidth, newHeight) ; 
+		return temp;
+	}
+
+	public static BufferedImage resizeImage(BufferedImage originalImage, int newHeight, int newWidth) {
+		BufferedImage newImage = new BufferedImage(newWidth, newHeight, originalImage.getType());
+
+		int[] pixelsBuffer = new int[originalImage.getHeight() * originalImage.getWidth()];
+
+		for (int i = 0; i < originalImage.getWidth(); i++) {
+			for (int j = 0; j < originalImage.getHeight(); j++) {
+				pixelsBuffer[j * originalImage.getWidth() + i] = new Color(originalImage.getRGB(i, j)).getRed();
+			}
+		}
+
+		pixelsBuffer = resizePixels(pixelsBuffer, originalImage.getWidth(), originalImage.getHeight(), newWidth,
+				newHeight);
 		int alpha = new Color(originalImage.getRGB(1, 1)).getAlpha();
-		
-		for(int i=0; i<newWidth; i++) {
-			for(int j=0; j<newHeight; j++) {
-				int newPixel = GeneralImagingOperations.colorToRGB(alpha, pixelsBuffer[j*newWidth+i], pixelsBuffer[j*newWidth+i], pixelsBuffer[j*newWidth+i]) ;		
+
+		for (int i = 0; i < newWidth; i++) {
+			for (int j = 0; j < newHeight; j++) {
+				int newPixel = GeneralImagingOperations.colorToRGB(alpha, pixelsBuffer[j * newWidth + i],
+						pixelsBuffer[j * newWidth + i], pixelsBuffer[j * newWidth + i]);
 				newImage.setRGB(i, j, newPixel);
 			}
 		}
-		
-		return newImage ; 
+
+		return newImage;
 	}
-	
-	public static void main(String args[]) {
-		String pathToImage = args[0] ; 
-		String pathToScaledImage = args[1];
-		int width = Integer.parseInt(args[2]);
-		int height= Integer.parseInt(args[3]);
-		
-		BufferedImage image = null ;
-		BufferedImage endImage ; 
-		try{
-			///home/nikolis/Pictures/3s2.jpg
-			image = ImageIO.read(new File(pathToImage));
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		endImage = resizeImage(image, width, height) ; 
-		try{///home/nikolis/Pictures/4s22.jpg
-			ImageIO.write(endImage,"jpg", new File(pathToScaledImage)) ;
-		}catch(Exception e){
-			e.printStackTrace(); 
+
+	public static void sizeScaleAllImagesInAdirectory(String pathToDirectory, int height, int width) {
+		File folder = new File(pathToDirectory);
+		File[] listOfFiles = folder.listFiles();
+		System.out.println(pathToDirectory);
+		for (int i = 0; i < listOfFiles.length; i++) {
+		    BufferedImage inputImage = null ;   
+		    BufferedImage scaledImage = null ;
+		    /*
+			try {
+			    if (listOfFiles[i].isFile()) {
+			    	System.out.println(pathToDirectory);
+			    	System.out.println(listOfFiles[i].toString());
+			    	inputImage = ImageIO.read(listOfFiles[i]) ;
+			    	scaledImage = resizeImage(inputImage, width, height);
+			    	ImageIO.write(scaledImage, "jpg", new File(pathToDirectory+"/"+listOfFiles[i].toString()));
+			      } 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}*/
 		}
 	}
 }

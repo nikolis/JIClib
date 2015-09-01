@@ -4,10 +4,7 @@ import imageprocessing.utilities.GeneralImagingOperations;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 
 public class LineraFileters {
 	// This is the representation of The kernels to be used

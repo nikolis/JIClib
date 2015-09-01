@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 	<joms>
-		<proccess name="preproccess" path="/home/nikolis/Desktop/pictures/">
-			<klass name="ones">/home/nikolis/Desktop/pictures/ones.jpg</klass>
-			<klass name="twos">/home/nikolis/Desktop/pictures/twos.jpg</klass>
-			<klass name="threes">/home/nikolis/Desktop/pictures/threes.jpg</klass>
+		<proccess name="preproccess" path="/home/nga/Desktop/pictures/">
+			<klass name="ones">/home/nga/Desktop/pictures/ones.jpg</klass>
+			<klass name="twos">/home/nga/Desktop/pictures/twos.jpg</klass>
+			<klass name="threes">/home/nga/Desktop/pictures/threes.jpg</klass>
 		</proccess>
 		
 		
