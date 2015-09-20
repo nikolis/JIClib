@@ -106,7 +106,6 @@ public class ArtificialNeuralNetwork {
 			alltheds[i]=NeuralHelper.returnAllRowsAndGivenCollumns(alltheds[i], 1) ;
 		}
 	
-		
 		for(int i=0; i<allTheRegTerms.length; i++)
 		{
 			allTheRegTerms[i] = NeuralHelper.combineTwoMatrix(NeuralHelper.createMatrixOfZeros(alltheThetas[i].rows(), 1), NeuralHelper.returnAllRowsAndGivenCollumns(alltheThetas[i], 1)).multiply(lambda/featureMatrix.rows()) ;
@@ -170,7 +169,7 @@ public class ArtificialNeuralNetwork {
 	 * @param lambda
 	 * @param numberOfClasses
 	 */
-	public void batchGradientDescemt(final double alpha, final double lambda, final int numOfIterations, final int numberOfClasses)
+	public List<double[][]> batchGradientDescemt(final double alpha, final double lambda, final int numOfIterations, final int numberOfClasses)
 	{
 		for(int i=0; i<alltheThetas.length; i++)
 		{
@@ -196,6 +195,7 @@ public class ArtificialNeuralNetwork {
 			matfile.addArray(NeuralHelper.matrix2Array(alltheThetas[i]), "Theta"+i);
 		}
 		matfile.writeFile() ;
+		return NeuralHelper.matrix2ArrayList(alltheThetas) ; 
 	}
 
 	/**

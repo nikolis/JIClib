@@ -15,7 +15,7 @@ public class ArtificialNeuralNetworkTest {
 	
 	
 	
-	@Test
+	//@Test
 	/**
 	 * This method tests the predict method Using
 	 * a tested implementation written in octave

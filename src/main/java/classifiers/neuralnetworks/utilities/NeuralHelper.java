@@ -3,6 +3,8 @@ package classifiers.neuralnetworks.utilities;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.la4j.matrix.dense.Basic2DMatrix;
@@ -24,7 +26,7 @@ public class NeuralHelper {
 		}
 		return matrix;
 	}
-
+	
 	public static double findMax(double[][] array) {
 		double max = -1;
 		for (int i = 0; i < array.length; i++) {
@@ -61,6 +63,15 @@ public class NeuralHelper {
 		}
 		return array;
 	}
+	
+	public static List<double[][]> matrix2ArrayList(Matrix[] matrixes) {
+		ArrayList<double[][]> parameters = new ArrayList<>(); 
+		for(int i=0; i<matrixes.length; i++) {
+			parameters.add(matrix2Array(matrixes[i])) ;
+		}
+		return parameters ; 
+	}
+	
 
 	/**
 	 * Basically add's one more column at the beginning of the matrix to serve
