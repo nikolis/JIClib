@@ -54,22 +54,27 @@ public class nearesNeibour {
 	public static void sizeScaleAllImagesInAdirectory(String pathToDirectory, int height, int width) {
 		File folder = new File(pathToDirectory);
 		File[] listOfFiles = folder.listFiles();
-		System.out.println(pathToDirectory);
+		
 		for (int i = 0; i < listOfFiles.length; i++) {
-		    BufferedImage inputImage = null ;   
-		    BufferedImage scaledImage = null ;
-		    /*
+			BufferedImage inputImage = null;
+			BufferedImage scaledImage = null;
+
 			try {
-			    if (listOfFiles[i].isFile()) {
-			    	System.out.println(pathToDirectory);
-			    	System.out.println(listOfFiles[i].toString());
-			    	inputImage = ImageIO.read(listOfFiles[i]) ;
-			    	scaledImage = resizeImage(inputImage, width, height);
-			    	ImageIO.write(scaledImage, "jpg", new File(pathToDirectory+"/"+listOfFiles[i].toString()));
-			      } 
+				if (listOfFiles[i].isFile()) {
+					System.out.println(listOfFiles[i]);
+					inputImage = ImageIO.read(listOfFiles[i]);
+					scaledImage = resizeImage(inputImage, width, height);
+					ImageIO.write(scaledImage, "jpg", new File(listOfFiles[i].toString()));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
-			}*/
+			}
+
 		}
 	}
+
+	public static void main(String args[]) {
+		nearesNeibour.sizeScaleAllImagesInAdirectory("/home/nikolis/Desktop/pictures/twos", 300, 300);
+	}
+
 }
